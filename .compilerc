@@ -1,0 +1,15 @@
+{
+  "env": {
+    "development": {
+      "application/javascript": {
+        "presets": ["es2016-node5"],
+        "sourceMaps": "inline",
+        "plugins": [
+          "transform-es2015-destructuring",
+          "transform-es2015-modules-commonjs",
+          "transform-class-properties"
+        ]
+      }
+    }
+  }
+}

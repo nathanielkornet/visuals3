@@ -1,0 +1,32 @@
+{
+  "name": "visuals3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "init.js",
+  "scripts": {
+    "start": "electron ./src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nathanielkornet/visuals3.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nathanielkornet/visuals3/issues"
+  },
+  "homepage": "https://github.com/nathanielkornet/visuals3#readme",
+  "dependencies": {
+    "three": "^0.85.2"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-class-properties": "^6.6.0",
+    "babel-preset-es2016-node5": "^1.1.2",
+    "eslint": "^3.19.0",
+    "eslint-config-esmanning": "^1.0.4",
+    "eslint-plugin-import": "^2.2.0",
+    "electron-connect": "^0.3.0",
+    "electron-packager": "^4.1.3",
+    "electron-prebuilt-compile": "^1.6.11"
+  }
+}
