@@ -1,4 +1,4 @@
-// import Midi from 'midi'
+import Midi from 'midi'
 
 const emptyBindings = {
   // knobs
@@ -13,7 +13,7 @@ const emptyBindings = {
 export default class MidiInterface {
   constructor () {
     // Set up a new input.
-    const input = {} // new Midi.input()
+    const input = new Midi.input()
 
     if (input.getPortCount() > 0) {
       // set to parse message on receipt

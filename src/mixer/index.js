@@ -21,7 +21,7 @@ export default class Mixer {
     this.addChannels = bind(this, this.addChannels)
 
     this.addChannels(numChannels)
-    // this.initializeMidiBindings()
+    this.initializeMidiBindings()
   }
 
   initializeMidiBindings () {

@@ -20,10 +20,10 @@ export default class Visuals {
     this.initializeRenderer = bind(this, this.initializeRenderer)
     this.render = bind(this, this.render)
 
-    // this.midi = new MidiInterface()
+    this.midi = new MidiInterface()
     this.mixer = new Mixer(8, this.midi)
 
-    // this.initializeMidiBindings()
+    this.initializeMidiBindings()
 
     this.initializeRenderer()
   }
