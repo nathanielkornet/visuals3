@@ -1,5 +1,5 @@
 {
-  "name": "visuals3",
+  "name": "visuals",
   "version": "1.0.0",
   "description": "",
   "main": "init.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nathanielkornet/visuals3.git"
+    "url": "git+https://github.com/nathanielkornet/visuals.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/nathanielkornet/visuals3/issues"
+    "url": "https://github.com/nathanielkornet/visuals/issues"
   },
-  "homepage": "https://github.com/nathanielkornet/visuals3#readme",
+  "homepage": "https://github.com/nathanielkornet/visuals#readme",
   "dependencies": {
     "midi": "^0.9.5",
     "three": "^0.85.2"
