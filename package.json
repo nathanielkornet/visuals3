@@ -18,6 +18,7 @@
   "homepage": "https://github.com/nathanielkornet/visuals#readme",
   "dependencies": {
     "midi": "^0.9.5",
+    "quickhull3d": "^2.0.0",
     "three": "^0.85.2"
   },
   "devDependencies": {
