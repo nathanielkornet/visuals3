@@ -3,7 +3,7 @@ import {
 } from 'three'
 import MidiInterface from './midi-interface'
 import Mixer from './mixer'
-import { TriangleLand, Spherez, LineGeometry } from './scenes'
+import { TriangleLand, Spherez, LineGeometry, RandoPolys } from './scenes'
 import bind from '@dlmanning/bind'
 
 export default class Visuals {
@@ -50,9 +50,13 @@ export default class Visuals {
     mixer.channels[1].setInput(spherez)
     scene.add(spherez)
 
-    const lineGeo = new LineGeometry()
-    mixer.channels[2].setInput(lineGeo)
-    scene.add(lineGeo)
+    // const lineGeo = new LineGeometry()
+    // mixer.channels[2].setInput(lineGeo)
+    // scene.add(lineGeo)
+
+    const randoPolys = new RandoPolys()
+    mixer.channels[3].setInput(randoPolys)
+    scene.add(randoPolys)
 
     // ^^ there's gotta be a better way...
 

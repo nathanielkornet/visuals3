@@ -4,9 +4,9 @@ import { ConvexBufferGeometry } from '../geometries'
 export default class RandomConvexPolygon extends Mesh {
   constructor (props = {}) {
     const {
-      // maxHeight = 10,
-      // maxWidth = 10,
-      // maxDepth = 10,
+      maxHeight = 10,
+      maxWidth = 10,
+      maxDepth = 10,
       opacity = 1,
       color = 'white',
       wireframe = true
@@ -17,11 +17,10 @@ export default class RandomConvexPolygon extends Mesh {
     for (let i = 0; i < 50; i++) {
       const point = []
 
-      for (let i = 0; i < 3; i++) {
-        const pos = Math.random() * 30
-        const mult = Math.random() > 0.5 ? 1 : -1
-        point.push(pos * mult)
-      }
+      // x, y, z
+      point.push(Math.random() * maxWidth)
+      point.push(Math.random() * maxHeight)
+      point.push(Math.random() * maxDepth)
 
       points.push(point)
     }
