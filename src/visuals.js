@@ -1,13 +1,13 @@
 import {
   WebGLRenderer, PerspectiveCamera, Vector3, Scene
 } from 'three'
-import MidiInterface from './midi-interface'
+// import MidiInterface from './midi-interface'
 import Mixer from './mixer'
 import { TriangleLand, Spherez, LineGeometry, RandoPolys } from './scenes'
 import bind from '@dlmanning/bind'
 
 export default class Visuals {
-  constructor () {
+  constructor (props) {
     this.state = {
       time: 0,
       cameraSpeed: {x: 0, y: 0, z: 0},
@@ -16,14 +16,15 @@ export default class Visuals {
       cameraRotationSpeed: 0
     }
 
-    this.initializeMidiBindings = bind(this, this.initializeMidiBindings)
+    // this.initializeMidiBindings = bind(this, this.initializeMidiBindings)
     this.initializeRenderer = bind(this, this.initializeRenderer)
     this.render = bind(this, this.render)
 
-    this.midi = new MidiInterface()
+    // this.midi = new MidiInterface()
+
     this.mixer = new Mixer(8, this.midi)
 
-    this.initializeMidiBindings()
+    // this.initializeMidiBindings()
 
     this.initializeRenderer()
   }
