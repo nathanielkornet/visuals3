@@ -1,4 +1,8 @@
-import { Mesh, MeshBasicMaterial } from 'three'
+import {
+  Mesh,
+  MeshBasicMaterial,
+  MeshNormalMaterial
+} from 'three'
 import { ConvexBufferGeometry } from '../geometries'
 
 export default class RandomConvexPolygon extends Mesh {
@@ -9,12 +13,14 @@ export default class RandomConvexPolygon extends Mesh {
       maxDepth = 10,
       opacity = 1,
       color = 'white',
-      wireframe = true
+      wireframe = true,
+      maxPoints = 50,
+      useNormalMaterial = false
     } = props
 
     let points = []
 
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < maxPoints; i++) {
       const point = []
 
       // x, y, z
@@ -27,7 +33,11 @@ export default class RandomConvexPolygon extends Mesh {
 
     const geometry = new ConvexBufferGeometry(points)
 
-    const material = new MeshBasicMaterial({
+    const MeshMaterial = useNormalMaterial
+      ? MeshNormalMaterial
+      : MeshBasicMaterial
+
+    const material = new MeshMaterial({
       color,
       wireframe,
       opacity
