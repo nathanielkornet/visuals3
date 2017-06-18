@@ -5,8 +5,9 @@ import Mixer from './mixer'
 import { TriangleLand, Spherez, LineGeometry, RandoPolys } from './scenes'
 import bind from '@dlmanning/bind'
 
+// conditionally require midi interface module
 let MidiInterface = null
-if (!process.env.IGNORE_MIDI) {
+if (process.env.IS_HOST_CLIENT) {
   MidiInterface = require('./midi-interface')
 }
 

@@ -4,7 +4,7 @@
   "description": "",
   "main": "init.js",
   "scripts": {
-    "start": "electron ./src/app.js",
+    "start": "cross-env IS_HOST_CLIENT=true electron ./src/app.js",
     "build": "./node_modules/.bin/webpack",
     "server": "npm run build && node server.js"
   },

@@ -11,7 +11,7 @@ module.exports = {
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
-        'IGNORE_MIDI': true
+        'IS_HOST_CLIENT': false
       }
     })
   ],
@@ -21,6 +21,8 @@ module.exports = {
     ]
   },
   node: {
+    // need to include this to resolve weird fs module error
+    // see: https://github.com/pugjs/pug-loader/issues/8#issuecomment-55568520
     fs: 'empty'
   }
 }
