@@ -5,9 +5,8 @@
   "main": "init.js",
   "scripts": {
     "start": "electron ./src/app.js",
-    "build": "webpack",
-    "server": "node server.js",
-    "both": "npm start && npm run server"
+    "build": "./node_modules/.bin/webpack",
+    "server": "npm run build && node server.js"
   },
   "repository": {
     "type": "git",

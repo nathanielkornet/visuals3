@@ -1,12 +1,10 @@
-import {
-  Group
-} from 'three'
+import { Group } from 'three'
 import { RandomConvexPolygon } from '../../lib/mesh'
 import { getRandomGrayscaleHexColor } from '../../lib/helpers'
 import bind from '@dlmanning/bind'
 
 export default class RandoPolys extends Group {
-  constructor (midi) {
+  constructor () {
     super()
 
     this.initialize = bind(this, this.initialize)
@@ -31,7 +29,8 @@ export default class RandoPolys extends Group {
     const {
       time,
       spread,
-      fuckFactor
+      fuckFactor,
+      opacity
     } = props
 
     this.rotation.y += 0.001
@@ -42,9 +41,12 @@ export default class RandoPolys extends Group {
       const theta = (0.002 * time) + (i / (this.children.length - 1)) * 2 * Math.PI * fuckFactor
       const chi = (0.002 * time) + (i / (this.children.length - 1)) * Math.PI * fuckFactor
 
-      poly.position.x = spread * 20 * Math.cos(theta) * Math.sin(chi)
-      poly.position.y = spread * 20 * Math.sin(theta) * Math.sin(chi)
-      poly.position.z = spread * 20 * Math.cos(chi)
+      poly.position.x = spread * Math.cos(theta) * Math.sin(chi)
+      poly.position.y = spread * Math.sin(theta) * Math.sin(chi)
+      poly.position.z = spread * Math.cos(chi)
+
+      poly.material.opacity = opacity
+      poly.material.transparent = true
     })
   }
 }

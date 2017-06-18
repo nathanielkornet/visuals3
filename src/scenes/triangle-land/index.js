@@ -3,20 +3,13 @@ import Triangle from './triangle'
 import bind from '@dlmanning/bind'
 
 export default class TriangleLand extends Scene {
-  constructor (midi) {
+  constructor () {
     super()
 
-    this.initializeMidiBindings = bind(this, this.initializeMidiBindings)
     this.initializeScene = bind(this, this.initializeScene)
     this.update = bind(this, this.update)
 
-    // this.initializeMidiBindings(midi)
     this.initializeScene()
-  }
-
-  initializeMidiBindings (midi) {
-    // controls "spread" of the triangles
-    midi.bind('K5', val => { this.state.spread = val })
   }
 
   initializeScene () {

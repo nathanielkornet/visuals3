@@ -10,7 +10,7 @@ import {
 import bind from '@dlmanning/bind'
 
 export default class LineGeometry extends Group {
-  constructor (midi) {
+  constructor () {
     super()
 
     this.initialize = bind(this, this.initialize)

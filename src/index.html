@@ -10,7 +10,13 @@
         overflow: hidden;
       }
     </style>
-    <script src="../dist/bundle.js"></script>
+    <script>
+      import Visuals from './visuals'
+
+      window.onload = function () {
+        const visuals = new Visuals()
+      }
+    </script>
   </head>
   <body />
 </html>

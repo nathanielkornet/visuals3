@@ -4,14 +4,11 @@ import {
 import bind from '@dlmanning/bind'
 
 export default class Spherez extends Group {
-  constructor (midi) {
+  constructor () {
     super()
 
-    // this.initializeMidiBindings = bind(this, this.initializeMidiBindings)
     this.initialize = bind(this, this.initialize)
     this.update = bind(this, this.update)
-
-    // this.initializeMidiBindings(midi)
 
     this.initialize()
   }

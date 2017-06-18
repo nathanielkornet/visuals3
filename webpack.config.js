@@ -10,9 +10,9 @@ module.exports = {
   plugins: [
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
-      // NOTE: need to use this maybe somehow to prevent midi stuff
-      // from being included in build
-      USE_MIDI: false
+      'process.env': {
+        'IGNORE_MIDI': true
+      }
     })
   ],
   module: {
