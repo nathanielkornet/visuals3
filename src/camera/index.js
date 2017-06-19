@@ -16,7 +16,9 @@ export default class Camera extends PerspectiveCamera {
     this.update = bind(this, this.update)
 
     this.midi = midi
-    this.initializeMidiBindings()
+    if (midi != null) {
+      this.initializeMidiBindings()
+    }
 
     this.position.set(0, 0, 100)
     this.lookAt(new Vector3(0, 0, 0))
