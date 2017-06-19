@@ -6,7 +6,8 @@
   "scripts": {
     "start": "cross-env IS_HOST_CLIENT=true electron ./src/app.js",
     "build": "./node_modules/.bin/webpack",
-    "server": "npm run build && node server.js"
+    "server": "npm run build && node server.js",
+    "standalone": "cross-env IS_STANDALONE=true npm start"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,8 @@
     "express": "^4.15.3",
     "midi": "^0.9.5",
     "quickhull3d": "^2.0.0",
+    "socket.io": "^2.0.3",
+    "socket.io-client": "^2.0.3",
     "three": "^0.85.2"
   },
   "devDependencies": {

@@ -3,7 +3,9 @@ import { enableLiveReload } from 'electron-compile'
 
 let mainWindow = null
 
-enableLiveReload()
+if (process.env.IS_STANDALONE) {
+  enableLiveReload()
+}
 
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
