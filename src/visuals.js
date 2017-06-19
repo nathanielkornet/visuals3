@@ -1,13 +1,18 @@
 import {
   WebGLRenderer, PerspectiveCamera, Vector3, Scene
 } from 'three'
-import MidiInterface from './midi-interface'
 import Mixer from './mixer'
 import { TriangleLand, Spherez, LineGeometry, RandoPolys } from './scenes'
 import bind from '@dlmanning/bind'
 
+// conditionally require midi interface module
+let MidiInterface = null
+if (process.env.IS_HOST_CLIENT) {
+  MidiInterface = require('./midi-interface')
+}
+
 export default class Visuals {
-  constructor () {
+  constructor (props) {
     this.state = {
       time: 0,
       cameraSpeed: {x: 0, y: 0, z: 0},
@@ -20,10 +25,12 @@ export default class Visuals {
     this.initializeRenderer = bind(this, this.initializeRenderer)
     this.render = bind(this, this.render)
 
-    this.midi = new MidiInterface()
-    this.mixer = new Mixer(8, this.midi)
+    if (MidiInterface != null) {
+      this.midi = new MidiInterface()
+      this.initializeMidiBindings()
+    }
 
-    this.initializeMidiBindings()
+    this.mixer = new Mixer(8, this.midi)
 
     this.initializeRenderer()
   }

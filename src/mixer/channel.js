@@ -7,7 +7,9 @@ export default class Channel {
 
     this.channelNum = channelNum
 
-    this.initializeMidiBindings(midi)
+    if (midi != null) {
+      this.initializeMidiBindings(midi)
+    }
   }
 
   initializeMidiBindings (midi) {

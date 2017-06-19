@@ -10,7 +10,9 @@ const emptyBindings = {
   }
 }
 
-export default class MidiInterface {
+// need to use module.exports so that the module can be
+// conditionally required
+module.exports = class MidiInterface {
   constructor () {
     // Set up a new input.
     const input = new Midi.input()

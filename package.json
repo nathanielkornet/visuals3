@@ -4,7 +4,9 @@
   "description": "",
   "main": "init.js",
   "scripts": {
-    "start": "electron ./src/app.js"
+    "start": "cross-env IS_HOST_CLIENT=true electron ./src/app.js",
+    "build": "./node_modules/.bin/webpack",
+    "server": "npm run build && node server.js"
   },
   "repository": {
     "type": "git",
@@ -17,12 +19,14 @@
   },
   "homepage": "https://github.com/nathanielkornet/visuals#readme",
   "dependencies": {
+    "express": "^4.15.3",
     "midi": "^0.9.5",
     "quickhull3d": "^2.0.0",
     "three": "^0.85.2"
   },
   "devDependencies": {
     "@dlmanning/bind": "^1.0.0",
+    "babel-loader": "^7.0.0",
     "babel-plugin-transform-class-properties": "^6.6.0",
     "babel-plugin-transform-object-rest-spread": "6.23.0",
     "babel-preset-es2016-node5": "^1.1.2",
@@ -32,6 +36,7 @@
     "electron-rebuild": "^1.5.11",
     "eslint": "^3.19.0",
     "eslint-config-esmanning": "^1.0.4",
-    "eslint-plugin-import": "^2.2.0"
+    "eslint-plugin-import": "^2.2.0",
+    "webpack": "^2.6.1"
   }
 }
