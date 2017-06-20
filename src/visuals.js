@@ -16,39 +16,37 @@ export default class Visuals {
     this.initializeRenderer = bind(this, this.initializeRenderer)
     this.render = bind(this, this.render)
 
-    let socket = null
-
     if (process.env.IS_HOST_CLIENT) {
-      socket = new SocketIOClient('http://localhost:9001')
-      socket.open()
-      socket.emit('test', 'hello from the host, socket world')
+      this.socket = new SocketIOClient('http://localhost:9001')
+      this.socket.open()
+      this.socket.emit('test', 'hello from the host, socket world')
     } else {
-      socket = new SocketIOClient()
+      this.socket = new SocketIOClient()
 
       // socket.on('connect', () => getInitialState())
-      socket.open()
-      socket.on('test', val => {
+      this.socket.open()
+      this.socket.on('test', val => {
         console.log(val)
       })
     }
 
     if (MidiInterface != null) {
-      this.midi = new MidiInterface(socket)
+      this.midi = new MidiInterface(this.socket)
     }
 
-    this.mixer = new Mixer(8, this.midi, socket)
+    this.mixer = new Mixer(8, this.midi, this.socket)
 
     this.initializeRenderer()
   }
 
   initializeRenderer () {
-    const { mixer, midi } = this
+    const { mixer, midi, socket } = this
 
     const renderer = new WebGLRenderer()
     renderer.setSize(window.innerWidth, window.innerHeight)
     document.body.appendChild(renderer.domElement)
 
-    const camera = new Camera(midi)
+    const camera = new Camera(midi, socket)
     const scene = new Scene()
 
     // set mixer channel input sources, add source to scene

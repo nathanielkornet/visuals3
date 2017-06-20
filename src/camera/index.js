@@ -2,11 +2,12 @@ import { PerspectiveCamera, Vector3 } from 'three'
 import bind from '@dlmanning/bind'
 
 export default class Camera extends PerspectiveCamera {
-  constructor (midi) {
+  constructor (midi, socket) {
     super(45, window.innerWidth / window.innerHeight, 1, 500)
 
     this.state = {
       cameraSpeed: {x: 0, y: 0, z: 0},
+      cameraPosition: {x: 0, y: 0, z: 100},
       zoomZ: 0,
       cameraType: 1,
       cameraRotationSpeed: 0
@@ -20,6 +21,14 @@ export default class Camera extends PerspectiveCamera {
       this.initializeMidiBindings()
     }
 
+    this.socket = socket
+    socket.on('update camera', data => {
+      const { cameraPosition, cameraRotationSpeed, cameraType } = data
+      this.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z)
+      this.state.cameraRotationSpeed = cameraRotationSpeed
+      this.state.cameraType = cameraType
+    })
+
     this.position.set(0, 0, 100)
     this.lookAt(new Vector3(0, 0, 0))
   }
@@ -30,7 +39,7 @@ export default class Camera extends PerspectiveCamera {
     midi.bind('PB1', val => {
       if (val > 1) {
         this.position.set(0, 0, 100)
-        this.lookAt(new Vector3(0, 0, 0))
+        // this.lookAt(new Vector3(0, 0, 0))
         this.state.cameraType = 1
       }
     })
@@ -78,18 +87,25 @@ export default class Camera extends PerspectiveCamera {
       zoomZ
     } = this.state
 
-    const newCameraPos = {
+    const newCameraPosition = {
       x: this.position.x + (0.001 * cameraSpeed.x),
       y: this.position.y + (0.001 * cameraSpeed.y),
       z: this.position.z + (0.005 * zoomZ * cameraSpeed.z)
     }
 
-    this.position.set(newCameraPos.x, newCameraPos.y, newCameraPos.z)
+    this.position.set(newCameraPosition.x, newCameraPosition.y, newCameraPosition.z)
 
+    let newRotation = 0
     if (cameraType === 2) {
       // apply rotation
-      const val = 0.0005 * cameraRotationSpeed
-      this.rotation.y += val
+      newRotation = 0.0005 * cameraRotationSpeed
+      this.rotation.y += newRotation
     }
+
+    this.socket.emit('update camera', {
+      cameraPosition: newCameraPosition,
+      cameraRotationSpeed,
+      cameraType
+    })
   }
 }

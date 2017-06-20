@@ -33,7 +33,6 @@ export default class Mixer {
     })
 
     socket.on('update mixer', data => {
-      console.log(data)
       this.state.spread = data.spread
       this.state.fuckFactor = data.fuckFactor
     })

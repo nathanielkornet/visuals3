@@ -19,6 +19,10 @@ io.on('connection', function (socket) {
   socket.on('update mixer', function (data) {
     socket.broadcast.emit('update mixer', data)
   })
+
+  socket.on('update camera', function (data) {
+    socket.broadcast.emit('update camera', data)
+  })
 })
 
 http.listen(9001, function () {
