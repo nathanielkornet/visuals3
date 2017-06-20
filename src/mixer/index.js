@@ -2,7 +2,7 @@ import Channel from './channel'
 import bind from '@dlmanning/bind'
 
 export default class Mixer {
-  constructor (numChannels, midi) {
+  constructor (numChannels, midi, socket) {
     this.state = {
       spread: 1,
       spreadSpeed: 0,
@@ -14,17 +14,29 @@ export default class Mixer {
 
     this.channels = []
     this.midi = midi
+    this.socket = socket
 
     this.addChannels = bind(this, this.addChannels)
     this.initializeMidiBindings = bind(this, this.initializeMidiBindings)
     this.getOutput = bind(this, this.getOutput)
     this.addChannels = bind(this, this.addChannels)
 
-    this.addChannels(numChannels)
+    this.addChannels(numChannels, socket)
 
     if (midi != null) {
       this.initializeMidiBindings()
     }
+
+    socket.on('update channel', data => {
+      const channelIdx = data.channelNum - 1
+      this.channels[channelIdx].setOpacity(data.opacity)
+    })
+
+    socket.on('update mixer', data => {
+      console.log(data)
+      this.state.spread = data.spread
+      this.state.fuckFactor = data.fuckFactor
+    })
   }
 
   initializeMidiBindings () {
@@ -73,19 +85,27 @@ export default class Mixer {
     })
   }
 
-  addChannels (num) {
+  addChannels (num, socket) {
     for (let i = 1; i < num; i++) {
-      this.channels.push(new Channel(i, this.midi))
+      this.channels.push(new Channel(i, this.midi, socket))
     }
   }
 
   getOutput (props) {
     // should change this name, it's just updating the scene
     // not really a "getter"
-    this.state.spread +=
-      (this.state.spreadSpeed * this.state.spreadSpeedApply)
-    this.state.fuckFactor +=
-      (this.state.fuckFactorSpeed * this.state.fuckFactorSpeedApply)
+    if (this.state.spreadSpeedApply !== 0 ||
+        this.state.fuckFactorSpeedApply !== 0) {
+      this.state.spread +=
+        (this.state.spreadSpeed * this.state.spreadSpeedApply)
+      this.state.fuckFactor +=
+        (this.state.fuckFactorSpeed * this.state.fuckFactorSpeedApply)
+
+      this.socket.emit('update mixer', {
+        spread: this.state.spread,
+        fuckFactor: this.state.fuckFactor
+      })
+    }
 
     this.channels.forEach(channel => {
       if (channel.hasInput()) {

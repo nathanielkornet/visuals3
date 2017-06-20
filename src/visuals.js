@@ -5,8 +5,6 @@ import { TriangleLand, Spherez, LineGeometry, RandoPolys } from './elements'
 import bind from '@dlmanning/bind'
 const SocketIOClient = require('socket.io-client')
 
-let socket = null
-
 // conditionally require midi interface module
 let MidiInterface = null
 if (process.env.IS_HOST_CLIENT) {
@@ -18,12 +16,16 @@ export default class Visuals {
     this.initializeRenderer = bind(this, this.initializeRenderer)
     this.render = bind(this, this.render)
 
+    let socket = null
+
     if (process.env.IS_HOST_CLIENT) {
       socket = new SocketIOClient('http://localhost:9001')
       socket.open()
       socket.emit('test', 'hello from the host, socket world')
     } else {
       socket = new SocketIOClient()
+
+      // socket.on('connect', () => getInitialState())
       socket.open()
       socket.on('test', val => {
         console.log(val)
@@ -31,10 +33,10 @@ export default class Visuals {
     }
 
     if (MidiInterface != null) {
-      this.midi = new MidiInterface()
+      this.midi = new MidiInterface(socket)
     }
 
-    this.mixer = new Mixer(8, this.midi)
+    this.mixer = new Mixer(8, this.midi, socket)
 
     this.initializeRenderer()
   }

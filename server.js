@@ -11,6 +11,14 @@ io.on('connection', function (socket) {
     console.log(data)
     socket.broadcast.emit('test', data)
   })
+
+  socket.on('update channel', function (data) {
+    socket.broadcast.emit('update channel', data)
+  })
+
+  socket.on('update mixer', function (data) {
+    socket.broadcast.emit('update mixer', data)
+  })
 })
 
 http.listen(9001, function () {
