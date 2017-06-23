@@ -12,7 +12,7 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': {
         'IS_HOST_CLIENT': false,
-        'VR_CLIENT': false
+        'VR_CLIENT': true
       }
     })
   ],

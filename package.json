@@ -6,8 +6,9 @@
   "scripts": {
     "start": "cross-env IS_HOST_CLIENT=true electron ./src/app.js",
     "build": "./node_modules/.bin/webpack",
+    "build-vr": "./node_modules/.bin/webpack --config vr.webpack.config.js",
     "server": "npm run build && node server.js",
-    "vr-server": "cross-env VR_CLIENT=true npm run server",
+    "vr-server": "npm run build-vr && node server.js",
     "vr-test": "cross-env VR_CLIENT=true npm start",
     "standalone": "cross-env IS_STANDALONE=true npm start"
   },
