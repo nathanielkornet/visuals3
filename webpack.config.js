@@ -11,7 +11,10 @@ module.exports = {
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
-        'IS_HOST_CLIENT': false
+        'IS_HOST_CLIENT': false,
+        'VR_CLIENT': true
+        // ^^ this needs to only be true for vr-server. should probably
+        // make another webpack.config for the vr server
       }
     })
   ],

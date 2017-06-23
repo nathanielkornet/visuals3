@@ -1,7 +1,8 @@
 export default class Channel {
   constructor (channelNum, midi, socket) {
     this.state = {
-      opacity: 0,
+      // NOTE: temp for testing
+      opacity: 0.5,
       isActive: false
     }
 
