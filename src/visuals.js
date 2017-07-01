@@ -98,7 +98,6 @@ export default class Visuals {
       // Initialize VR environment
       if (navigator.getVRDisplays) {
         this.assignVRDisplay = bind(this, function (displays) {
-          // vrDisplay = displays[0]
           if (displays.length > 0) {
             const vrDisplay = displays[0]
             this.render(vrDisplay)
