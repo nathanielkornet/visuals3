@@ -1,5 +1,5 @@
 export default class Channel {
-  constructor (channelNum, midi) {
+  constructor (channelNum, midi, socket) {
     this.state = {
       opacity: 0,
       isActive: false
@@ -8,12 +8,11 @@ export default class Channel {
     this.channelNum = channelNum
 
     if (midi != null) {
-      this.initializeMidiBindings(midi)
+      this.initializeMidiBindings(midi, socket)
     }
   }
 
-  initializeMidiBindings (midi) {
-    //
+  initializeMidiBindings (midi, socket) {
     const { channelNum } = this
 
     const knob = `K${channelNum}`
@@ -26,7 +25,16 @@ export default class Channel {
           this.setActive(true)
         }
       }
-      this.state.opacity = (val / 127)
+      const newOpacity = (val / 127)
+
+      this.setOpacity(newOpacity)
+
+      if (process.env.IS_HOST) {
+        socket.emit('update channel', {
+          channelNum,
+          ...this.state
+        })
+      }
     })
   }
 
@@ -48,5 +56,9 @@ export default class Channel {
 
   setActive (val) {
     this.state.isActive = val
+  }
+
+  setOpacity (val) {
+    this.state.opacity = val
   }
 }

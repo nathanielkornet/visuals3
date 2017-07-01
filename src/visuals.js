@@ -3,10 +3,11 @@ import Camera from './camera'
 import Mixer from './mixer'
 import { TriangleLand, Spherez, LineGeometry, RandoPolys } from './elements'
 import bind from '@dlmanning/bind'
+const SocketIOClient = require('socket.io-client')
 
 // conditionally require midi interface module
 let MidiInterface = null
-if (process.env.IS_HOST_CLIENT) {
+if (!process.env.IS_GUEST) {
   MidiInterface = require('./midi-interface')
 }
 
@@ -15,23 +16,37 @@ export default class Visuals {
     this.initializeRenderer = bind(this, this.initializeRenderer)
     this.render = bind(this, this.render)
 
-    if (MidiInterface != null) {
-      this.midi = new MidiInterface()
+    if (process.env.IS_HOST) {
+      this.socket = new SocketIOClient('http://localhost:9001')
+      this.socket.open()
+      this.socket.emit('test', 'hello from the host, socket world')
+    } else if (process.env.IS_GUEST) {
+      this.socket = new SocketIOClient()
+
+      // socket.on('connect', () => getInitialState())
+      this.socket.open()
+      this.socket.on('test', val => {
+        console.log(val)
+      })
     }
 
-    this.mixer = new Mixer(8, this.midi)
+    if (MidiInterface != null) {
+      this.midi = new MidiInterface(this.socket)
+    }
+
+    this.mixer = new Mixer(8, this.midi, this.socket)
 
     this.initializeRenderer()
   }
 
   initializeRenderer () {
-    const { mixer, midi } = this
+    const { mixer, midi, socket } = this
 
     const renderer = new WebGLRenderer()
     renderer.setSize(window.innerWidth, window.innerHeight)
     document.body.appendChild(renderer.domElement)
 
-    const camera = new Camera(midi)
+    const camera = new Camera(midi, socket)
     const scene = new Scene()
 
     // set mixer channel input sources, add source to scene
