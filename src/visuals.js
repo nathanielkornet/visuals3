@@ -7,7 +7,7 @@ const SocketIOClient = require('socket.io-client')
 
 // conditionally require midi interface module
 let MidiInterface = null
-if (process.env.IS_HOST_CLIENT) {
+if (!process.env.IS_GUEST) {
   MidiInterface = require('./midi-interface')
 }
 
@@ -16,11 +16,11 @@ export default class Visuals {
     this.initializeRenderer = bind(this, this.initializeRenderer)
     this.render = bind(this, this.render)
 
-    if (process.env.IS_HOST_CLIENT) {
+    if (process.env.IS_HOST) {
       this.socket = new SocketIOClient('http://localhost:9001')
       this.socket.open()
       this.socket.emit('test', 'hello from the host, socket world')
-    } else {
+    } else if (process.env.IS_GUEST) {
       this.socket = new SocketIOClient()
 
       // socket.on('connect', () => getInitialState())

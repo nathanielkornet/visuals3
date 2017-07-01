@@ -29,10 +29,12 @@ export default class Channel {
 
       this.setOpacity(newOpacity)
 
-      socket.emit('update channel', {
-        channelNum,
-        ...this.state
-      })
+      if (process.env.IS_HOST) {
+        socket.emit('update channel', {
+          channelNum,
+          ...this.state
+        })
+      }
     })
   }
 

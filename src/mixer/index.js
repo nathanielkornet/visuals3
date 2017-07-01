@@ -27,15 +27,17 @@ export default class Mixer {
       this.initializeMidiBindings()
     }
 
-    socket.on('update channel', data => {
-      const channelIdx = data.channelNum - 1
-      this.channels[channelIdx].setOpacity(data.opacity)
-    })
+    if (process.env.IS_GUEST) {
+      socket.on('update channel', data => {
+        const channelIdx = data.channelNum - 1
+        this.channels[channelIdx].setOpacity(data.opacity)
+      })
 
-    socket.on('update mixer', data => {
-      this.state.spread = data.spread
-      this.state.fuckFactor = data.fuckFactor
-    })
+      socket.on('update mixer', data => {
+        this.state.spread = data.spread
+        this.state.fuckFactor = data.fuckFactor
+      })
+    }
   }
 
   initializeMidiBindings () {
@@ -100,10 +102,12 @@ export default class Mixer {
       this.state.fuckFactor +=
         (this.state.fuckFactorSpeed * this.state.fuckFactorSpeedApply)
 
-      this.socket.emit('update mixer', {
-        spread: this.state.spread,
-        fuckFactor: this.state.fuckFactor
-      })
+      if (process.env.IS_HOST) {
+        this.socket.emit('update mixer', {
+          spread: this.state.spread,
+          fuckFactor: this.state.fuckFactor
+        })
+      }
     }
 
     this.channels.forEach(channel => {

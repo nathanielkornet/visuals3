@@ -4,10 +4,13 @@
   "description": "",
   "main": "init.js",
   "scripts": {
-    "start": "cross-env IS_HOST_CLIENT=true electron ./src/app.js",
+    "start": "electron ./src/app.js",
+    "dev": "cross-env DEV_MODE=true npm start",
+    "host": "cross-env IS_HOST=true npm start",
+    "host-dev": "cross-env DEV_MODE=true npm run host",
     "build": "./node_modules/.bin/webpack",
-    "server": "npm run build && node server.js",
-    "standalone": "cross-env IS_STANDALONE=true npm start"
+    "server": "npm run build && node server.js"
+
   },
   "repository": {
     "type": "git",
