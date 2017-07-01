@@ -4,13 +4,15 @@
   "description": "",
   "main": "init.js",
   "scripts": {
-    "start": "cross-env IS_HOST_CLIENT=true electron ./src/app.js",
+    "start": "electron ./src/app.js",
+    "dev": "cross-env DEV_MODE=true npm start",
+    "host": "cross-env IS_HOST=true npm start",
+    "host-dev": "cross-env DEV_MODE=true npm run host",
     "build": "./node_modules/.bin/webpack",
     "build-vr": "./node_modules/.bin/webpack --config vr.webpack.config.js",
     "server": "npm run build && node server.js",
     "vr-server": "npm run build-vr && node server.js",
-    "vr-test": "cross-env VR_CLIENT=true npm start",
-    "standalone": "cross-env IS_STANDALONE=true npm start"
+    "vr-test": "cross-env VR_CLIENT=true npm start"
   },
   "repository": {
     "type": "git",

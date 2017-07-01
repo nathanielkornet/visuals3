@@ -11,8 +11,7 @@ module.exports = {
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
-        'IS_HOST_CLIENT': false,
-        'VR_CLIENT': false
+        'IS_GUEST': true
       }
     })
   ],

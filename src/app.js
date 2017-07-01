@@ -3,7 +3,7 @@ import { enableLiveReload } from 'electron-compile'
 
 let mainWindow = null
 
-if (process.env.IS_STANDALONE) {
+if (process.env.DEV_MODE) {
   enableLiveReload()
 }
 
