@@ -1,4 +1,10 @@
-import { WebGLRenderer, Scene } from 'three'
+import {
+  WebGLRenderer,
+  Scene,
+  PerspectiveCamera
+} from 'three'
+import VRControls from './lib/vr/vr-controls'
+import VREffect from './lib/vr/vr-effect'
 import Camera from './camera'
 import Mixer from './mixer'
 import { TriangleLand, Spherez, LineGeometry, RandoPolys } from './elements'
@@ -42,11 +48,25 @@ export default class Visuals {
   initializeRenderer () {
     const { mixer, midi, socket } = this
 
-    const renderer = new WebGLRenderer()
+    const renderer = new WebGLRenderer({antialias: false})
     renderer.setSize(window.innerWidth, window.innerHeight)
+    // renderer.setPixelRatio(Math.floor(window.devicePixelRatio))
     document.body.appendChild(renderer.domElement)
 
-    const camera = new Camera(midi, socket)
+    let camera = null
+    if (process.env.VR_CLIENT) {
+      require('./lib/vr/webvr-polyfill.js')
+      camera = new PerspectiveCamera(
+        75, window.innerWidth / window.innerHeight, 0.1, 10000
+      )
+
+      this.controls = new VRControls(camera)
+      this.effect = new VREffect(renderer)
+      this.effect.setSize(window.innerWidth, window.innerHeight)
+    } else {
+      camera = new Camera(midi, socket)
+    }
+
     const scene = new Scene()
 
     // set mixer channel input sources, add source to scene
@@ -73,23 +93,48 @@ export default class Visuals {
     this.scene = scene
     this.mixer = mixer
 
-    this.render()
+    // let vrDisplay = null
+    if (process.env.VR_CLIENT) {
+      // Initialize VR environment
+      if (navigator.getVRDisplays) {
+        this.assignVRDisplay = bind(this, function (displays) {
+          if (displays.length > 0) {
+            const vrDisplay = displays[0]
+            this.render(vrDisplay)
+          }
+        })
+        navigator.getVRDisplays().then(this.assignVRDisplay)
+      } else {
+        console.warn('no getVRDisplays')
+      }
+    } else {
+      this.render()
+    }
   }
 
-  render () {
+  render (vrDisplay) {
+    const { renderer, camera, scene, mixer, controls, effect } = this
+
+    if (process.env.VR_CLIENT && vrDisplay != null) {
+      if (!vrDisplay.isPresenting && vrDisplay.requestPresent) {
+        vrDisplay.requestPresent([{ source: renderer.domElement }])
+      }
+    }
     window.requestAnimationFrame(this.render)
 
     const date = new Date()
     const time = date.getTime() / 1000 * 60
 
-    const { renderer, camera, scene, mixer } = this
-
     // "get mixer output" aka update the various visuals
     mixer.getOutput({time})
 
-    // update camera
-    camera.update()
-
-    renderer.render(scene, camera)
+    if (process.env.VR_CLIENT) {
+      controls.update()
+      effect.render(scene, camera)
+    } else {
+      // update camera
+      camera.update()
+      renderer.render(scene, camera)
+    }
   }
 }

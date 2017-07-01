@@ -9,8 +9,10 @@
     "host": "cross-env IS_HOST=true npm start",
     "host-dev": "cross-env DEV_MODE=true npm run host",
     "build": "./node_modules/.bin/webpack",
-    "server": "npm run build && node server.js"
-
+    "build-vr": "./node_modules/.bin/webpack --config vr.webpack.config.js",
+    "server": "npm run build && node server.js",
+    "vr-server": "npm run build-vr && node server.js",
+    "vr-test": "cross-env VR_CLIENT=true npm start"
   },
   "repository": {
     "type": "git",
