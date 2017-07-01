@@ -7,7 +7,6 @@ export default class Camera extends PerspectiveCamera {
 
     this.state = {
       cameraSpeed: {x: 0, y: 0, z: 0},
-      cameraPosition: {x: 0, y: 0, z: 100},
       zoomZ: 0,
       cameraType: 1,
       cameraRotationSpeed: 0
