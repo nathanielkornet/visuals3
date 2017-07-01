@@ -7,7 +7,6 @@ export default class Camera extends PerspectiveCamera {
 
     this.state = {
       cameraSpeed: {x: 0, y: 0, z: 0},
-      cameraPosition: {x: 0, y: 0, z: 100},
       zoomZ: 0,
       cameraType: 1,
       cameraRotationSpeed: 0
@@ -45,7 +44,7 @@ export default class Camera extends PerspectiveCamera {
     midi.bind('PB1', val => {
       if (val > 1) {
         this.position.set(0, 0, 100)
-        // this.lookAt(new Vector3(0, 0, 0))
+        this.lookAt(new Vector3(0, 0, 0))
         this.state.cameraType = 1
       }
     })
@@ -115,11 +114,5 @@ export default class Camera extends PerspectiveCamera {
         cameraType
       })
     }
-
-    this.socket.emit('update camera', {
-      cameraPosition: newCameraPosition,
-      cameraRotationSpeed,
-      cameraType
-    })
   }
 }
