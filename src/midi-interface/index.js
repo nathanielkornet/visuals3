@@ -1,10 +1,11 @@
 import Midi from 'midi'
 
 const emptyBindings = {
-  // knobs
-  K: {},
-  // pads
-  P: {
+  K: {}, // knobs
+  F: {}, // faders
+  S: {}, // sliders
+  B: {}, // buttons
+  P: { // pads
     A: {},
     B: {}
   }
@@ -38,13 +39,33 @@ module.exports = class MidiInterface {
 
     let bindingAction = () => null
 
-    // knob turned
+    // CC
     if (status === 176) {
       const pct = Math.round((val / 127) * 100)
 
-      console.log(`turning K${note}, ${pct}%`)
-
-      bindingAction = this.bindings['K'][note]
+      if (note < 10) {
+        // knob
+        console.log(`turning K${note}, ${pct}%`)
+        bindingAction = this.bindings['K'][note]
+      } else if (note < 20) {
+        // fader
+        const noteTrans = note % 10
+        console.log(`sliding F${noteTrans}, ${pct}%`)
+        bindingAction = this.bindings['F'][noteTrans]
+      } else if (note < 30) {
+        // switch
+        const noteTrans = note % 20
+        console.log(`toggled S${noteTrans} ${val === 0 ? 'off' : 'on'}`)
+        bindingAction = this.bindings['S'][noteTrans]
+      } else if (note > 110 && note < 120) {
+        // transport button
+        // mapped to CC 115 - 119 on the mpd32, couldn't change them
+        const noteTrans = note % 110 - 4
+        console.log(`pressed B${noteTrans}`)
+        bindingAction = this.bindings['B'][noteTrans]
+      } else {
+        console.log('unrecognized input')
+      }
     }
 
     // keyboard note on
@@ -81,17 +102,19 @@ module.exports = class MidiInterface {
   * onChange: handler function for the value to be updated
   */
   bind (control, onChange) {
-    // knobs
-    if (control.charAt(0) === 'K') {
-      const number = control.substr(1)
-      this.bindings['K'][number] = onChange
-    }
+    const controlType = control.charAt(0)
 
-    // pads
-    if (control.charAt(0) === 'P') {
+    if (['K', 'F', 'S', 'B'].includes(controlType)) {
+      // knobs, faders, switches, buttons
+      const number = control.substr(1)
+      this.bindings[controlType][number] = onChange
+    } else if (controlType === 'P') {
+      // pads
       const bank = control.charAt(1)
       const number = control.charAt(2)
       this.bindings['P'][bank][number] = onChange
+    } else {
+      console.log(`could not properly bind ${control}`)
     }
   }
 

@@ -1,28 +1,46 @@
 export default class Channel {
-  constructor (channelNum, midi, socket) {
+  constructor (channelNum, midi, socket, scene) {
     this.state = {
-      opacity: 0,
+      opacity: 5,
       isActive: false
     }
 
     this.channelNum = channelNum
 
+    this.setSource = (source) => { this.source = source }
+    this.hasSource = () => this.source != null
+    this.updateSource = (props) => {
+      return this.source.update({...this.state, ...props})
+    }
+
+    this.isActive = () => this.state.isActive === true
+    this.setActive = (val) => {
+      this.state.isActive = val
+    }
+
+    this.setOpacity = (val) => {
+      this.state.opacity = val
+    }
+
     if (midi != null) {
-      this.initializeMidiBindings(midi, socket)
+      this.initializeMidiBindings(midi, socket, scene)
     }
   }
 
-  initializeMidiBindings (midi, socket) {
+  initializeMidiBindings (midi, socket, scene) {
     const { channelNum } = this
 
-    const knob = `K${channelNum}`
+    const faderId = `F${channelNum}`
+    // const switchId = `S${channelNum}`
 
-    midi.bind(knob, val => {
+    midi.bind(faderId, val => {
       if (val === 0) {
         this.setActive(false)
+        scene.remove(this.source)
       } else {
-        if (!this.isActive()) {
+        if (!this.isActive() && this.hasSource()) {
           this.setActive(true)
+          scene.add(this.source)
         }
       }
       const newOpacity = (val / 127)
@@ -36,29 +54,5 @@ export default class Channel {
         })
       }
     })
-  }
-
-  setInput (source) {
-    this.source = source
-  }
-
-  hasInput () {
-    return this.source != null
-  }
-
-  getOutput (props) {
-    return this.source.update({...this.state, ...props})
-  }
-
-  isActive () {
-    return this.state.isActive === true
-  }
-
-  setActive (val) {
-    this.state.isActive = val
-  }
-
-  setOpacity (val) {
-    this.state.opacity = val
   }
 }

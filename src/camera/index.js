@@ -41,18 +41,19 @@ export default class Camera extends PerspectiveCamera {
   initializeMidiBindings () {
     const { midi } = this
     // Camera position / type
-    midi.bind('PB1', val => {
-      if (val > 1) {
-        this.position.set(0, 0, 100)
-        this.lookAt(new Vector3(0, 0, 0))
-        this.state.cameraType = 1
-      }
+    midi.bind('B1', () => {
+      this.position.set(0, 0, 100)
+      this.lookAt(new Vector3(0, 0, 0))
+      this.state.cameraType = 1
     })
-    midi.bind('PB2', val => {
-      if (val > 1) {
-        this.position.set(0, 0, 0)
-        this.state.cameraType = 2
-      }
+    midi.bind('B2', () => {
+      this.position.set(0, 0, 0)
+      this.state.cameraType = 2
+    })
+
+    midi.bind('B5', () => {
+      // kill zoom
+      this.state.cameraSpeed = {x: 0, y: 0, z: 0}
     })
 
     // roation speed (in camera 2 view)
@@ -61,41 +62,42 @@ export default class Camera extends PerspectiveCamera {
     })
 
     // Joystick X: camera X
-    midi.bind('K9', val => {
+    midi.bind('K5', val => {
       this.state.cameraSpeed.x = val - 64
     })
     // Joystick Y: camera Y
-    midi.bind('K10', val => {
+    midi.bind('K6', val => {
       this.state.cameraSpeed.y = val - 64
     })
 
     // Camera zoom
     // speed
     midi.bind('K7', val => {
-      this.state.cameraSpeed.z = val / 1.5
+      this.state.cameraSpeed.z = val - 64
     })
-    // in toggle
-    midi.bind('PA1', val => {
-      this.state.zoomZ = val > 0 ? 1 : 0
-    })
-    // out toggle
-    midi.bind('PA5', val => {
-      this.state.zoomZ = val > 0 ? -1 : 0
-    })
+    // // in toggle
+    // midi.bind('PA1', val => {
+    //   this.state.zoomZ = val > 0 ? 1 : 0
+    // })
+    // // out toggle
+    // midi.bind('PA5', val => {
+    //   this.state.zoomZ = val > 0 ? -1 : 0
+    // })
   }
 
   update () {
     const {
       cameraSpeed,
       cameraRotationSpeed,
-      cameraType,
-      zoomZ
+      cameraType
+      // zoomZ
     } = this.state
 
     const newCameraPosition = {
       x: this.position.x + (0.001 * cameraSpeed.x),
       y: this.position.y + (0.001 * cameraSpeed.y),
-      z: this.position.z + (0.005 * zoomZ * cameraSpeed.z)
+      z: this.position.z - (0.005 * cameraSpeed.z)
+      // z: this.position.z + (0.005 * zoomZ * cameraSpeed.z)
     }
 
     this.position.set(newCameraPosition.x, newCameraPosition.y, newCameraPosition.z)

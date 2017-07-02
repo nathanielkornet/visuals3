@@ -40,13 +40,11 @@ export default class Visuals {
       this.midi = new MidiInterface(this.socket)
     }
 
-    this.mixer = new Mixer(8, this.midi, this.socket)
-
     this.initializeRenderer()
   }
 
   initializeRenderer () {
-    const { mixer, midi, socket } = this
+    const { midi, socket } = this
 
     const renderer = new WebGLRenderer({antialias: false})
     renderer.setSize(window.innerWidth, window.innerHeight)
@@ -69,29 +67,22 @@ export default class Visuals {
 
     const scene = new Scene()
 
-    // set mixer channel input sources, add source to scene
-    const triangleLand = new TriangleLand()
-    mixer.channels[0].setInput(triangleLand)
-    scene.add(triangleLand)
+    this.mixer = new Mixer(8, this.midi, this.socket, scene)
 
-    const spherez = new Spherez()
-    mixer.channels[1].setInput(spherez)
-    scene.add(spherez)
+    // set mixer channel input sources, add source to scene
+    this.mixer.channels[0].setSource(new TriangleLand())
+    this.mixer.channels[1].setSource(new Spherez())
+    this.mixer.channels[2].setSource(new RandoPolys())
+
+    this.midi.logBindings()
 
     // const lineGeo = new LineGeometry()
     // mixer.channels[2].setInput(lineGeo)
     // scene.add(lineGeo)
 
-    const randoPolys = new RandoPolys()
-    mixer.channels[3].setInput(randoPolys)
-    scene.add(randoPolys)
-
-    // ^^ there's gotta be a better way...
-
     this.renderer = renderer
     this.camera = camera
     this.scene = scene
-    this.mixer = mixer
 
     // let vrDisplay = null
     if (process.env.VR_CLIENT) {
