@@ -7,7 +7,13 @@ import VRControls from './lib/vr/vr-controls'
 import VREffect from './lib/vr/vr-effect'
 import Camera from './camera'
 import Mixer from './mixer'
-import { TriangleLand, Spherez, LineGeometry, RandoPolys } from './elements'
+import {
+  TriangleLand,
+  Spherez,
+  LineGeometry,
+  RandoPolys,
+  GiantSphere
+} from './elements'
 import bind from '@dlmanning/bind'
 const SocketIOClient = require('socket.io-client')
 
@@ -73,6 +79,7 @@ export default class Visuals {
     this.mixer.channels[0].setSource(new TriangleLand())
     this.mixer.channels[1].setSource(new Spherez())
     this.mixer.channels[2].setSource(new RandoPolys())
+    this.mixer.channels[3].setSource(new GiantSphere())
 
     this.midi.logBindings()
 
