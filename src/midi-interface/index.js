@@ -1,5 +1,3 @@
-import Midi from 'midi'
-
 const emptyBindings = {
   K: {}, // knobs
   F: {}, // faders
@@ -15,16 +13,21 @@ const emptyBindings = {
 // conditionally required
 module.exports = class MidiInterface {
   constructor () {
-    // Set up a new input.
-    const input = new Midi.input()
+    const webmidi = require('webmidi')
+    webmidi.enable(err => {
+      if (err) console.error(err)
 
-    if (input.getPortCount() > 0) {
-      // set to parse message on receipt
-      input.on('message', (deltaTime, message) => this.parseMessage(message))
-
-      // open the first available input port
-      input.openPort(0)
-    }
+      const input = webmidi.inputs[1]
+      input.addListener('controlchange', 'all', ev => {
+        this.parseMessage(ev.data)
+      })
+      input.addListener('noteon', 'all', ev => {
+        this.parseMessage(ev.data)
+      })
+      input.addListener('noteoff', 'all', ev => {
+        this.parseMessage(ev.data)
+      })
+    })
 
     // store of onChange handlers
     this.bindings = emptyBindings
