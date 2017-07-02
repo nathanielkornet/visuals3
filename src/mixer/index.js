@@ -4,7 +4,7 @@ import bind from '@dlmanning/bind'
 export default class Mixer {
   constructor (numChannels, midi, socket, scene) {
     this.state = {
-      spread: 1,
+      spread: 50,
       spreadSpeed: 0,
       spreadSpeedApply: 0,
       fuckFactor: 1,

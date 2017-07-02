@@ -1,6 +1,8 @@
 import { PerspectiveCamera, Vector3 } from 'three'
 import bind from '@dlmanning/bind'
 
+const origin = new Vector3(0, 0, 0)
+
 export default class Camera extends PerspectiveCamera {
   constructor (midi, socket) {
     super(45, window.innerWidth / window.innerHeight, 1, 500)
@@ -26,7 +28,7 @@ export default class Camera extends PerspectiveCamera {
         const { cameraPosition, cameraRotationSpeed, cameraType } = data
 
         if (this.state.cameraType !== 1 && cameraType === 1) {
-          this.lookAt(new Vector3(0, 0, 0))
+          this.lookAt(origin)
         }
         this.position.set(cameraPosition.x, cameraPosition.y, cameraPosition.z)
         this.state.cameraRotationSpeed = cameraRotationSpeed
@@ -34,8 +36,8 @@ export default class Camera extends PerspectiveCamera {
       })
     }
 
-    this.position.set(0, 0, 100)
-    this.lookAt(new Vector3(0, 0, 0))
+    this.position.set(0, 0, 0)
+    this.lookAt(origin)
   }
 
   initializeMidiBindings () {
@@ -43,12 +45,15 @@ export default class Camera extends PerspectiveCamera {
     // Camera position / type
     midi.bind('B1', () => {
       this.position.set(0, 0, 100)
-      this.lookAt(new Vector3(0, 0, 0))
+      this.lookAt(origin)
       this.state.cameraType = 1
     })
     midi.bind('B2', () => {
       this.position.set(0, 0, 0)
       this.state.cameraType = 2
+    })
+    midi.bind('B3', () => {
+      this.state.cameraType = 3
     })
 
     midi.bind('B5', () => {
@@ -85,7 +90,7 @@ export default class Camera extends PerspectiveCamera {
     // })
   }
 
-  update () {
+  update (props) {
     const {
       cameraSpeed,
       cameraRotationSpeed,
@@ -93,20 +98,36 @@ export default class Camera extends PerspectiveCamera {
       // zoomZ
     } = this.state
 
-    const newCameraPosition = {
-      x: this.position.x + (0.001 * cameraSpeed.x),
-      y: this.position.y + (0.001 * cameraSpeed.y),
-      z: this.position.z - (0.005 * cameraSpeed.z)
-      // z: this.position.z + (0.005 * zoomZ * cameraSpeed.z)
-    }
+    let newCameraPosition = {x: 0, y: 0, z: 0}
+    if (cameraType === 1) {
+      newCameraPosition = {
+        x: this.position.x + (0.001 * cameraSpeed.x),
+        y: this.position.y + (0.001 * cameraSpeed.y),
+        z: this.position.z - (0.005 * cameraSpeed.z)
+        // z: this.position.z + (0.005 * zoomZ * cameraSpeed.z)
+      }
 
-    this.position.set(newCameraPosition.x, newCameraPosition.y, newCameraPosition.z)
+      this.position.set(newCameraPosition.x, newCameraPosition.y, newCameraPosition.z)
+    } else if (cameraType === 2) {
+      let newRotation = 0
+      if (cameraType === 2) {
+        // apply rotation
+        newRotation = 0.0005 * cameraRotationSpeed
+        this.rotation.y += newRotation
+      }
+    } else if (cameraType === 3) {
+      const { time } = props
 
-    let newRotation = 0
-    if (cameraType === 2) {
-      // apply rotation
-      newRotation = 0.0005 * cameraRotationSpeed
-      this.rotation.y += newRotation
+      newCameraPosition = {
+        x: Math.sin(time / 50000),
+        y: 0,
+        z: Math.cos(time / 50000)
+        // z: this.position.z + (0.005 * zoomZ * cameraSpeed.z)
+      }
+
+      this.lookAt(origin)
+
+      this.position.set(newCameraPosition.x, newCameraPosition.y, newCameraPosition.z)
     }
 
     if (process.env.IS_HOST) {

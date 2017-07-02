@@ -79,7 +79,12 @@ export default class Visuals {
     this.mixer.channels[0].setSource(new TriangleLand())
     this.mixer.channels[1].setSource(new Spherez())
     this.mixer.channels[2].setSource(new RandoPolys())
-    this.mixer.channels[3].setSource(new GiantSphere())
+    this.mixer.channels[3].setSource(new GiantSphere({
+      wireframe: true,
+      shape: 'box',
+      color: 'green'
+    }))
+    this.mixer.channels[4].setSource(new LineGeometry())
 
     this.midi.logBindings()
 
@@ -131,7 +136,7 @@ export default class Visuals {
       effect.render(scene, camera)
     } else {
       // update camera
-      camera.update()
+      camera.update({time})
       renderer.render(scene, camera)
     }
   }

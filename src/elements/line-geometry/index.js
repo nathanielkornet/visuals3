@@ -23,16 +23,16 @@ export default class LineGeometry extends Group {
     const geometry = new Geometry()
 
     const particleGeo = new SphereGeometry(0.1, 32, 32)
-    const particleMaterial = new MeshBasicMaterial('white')
+    const particleMaterial = new MeshBasicMaterial({color: 'black'})
 
-    for (let i = 0; i < 150; i++) {
+    for (let i = 0; i < 250; i++) {
       const particle = new Mesh(particleGeo, particleMaterial)
 
       particle.position.x = Math.random() * 2 - 1
       particle.position.y = Math.random() * 2 - 1
       particle.position.z = Math.random() * 2 - 1
       particle.position.normalize()
-      particle.position.multiplyScalar(Math.random() * 10 + 45)
+      particle.position.multiplyScalar(Math.random() * 60 + 10)
       particle.scale.x = particle.scale.y = 10
       this.add(particle)
 
@@ -41,7 +41,7 @@ export default class LineGeometry extends Group {
 
     // lines
     const line = new Line(geometry, new LineBasicMaterial(
-      { color: 0xffffff, opacity: 0.5 }
+      { color: 'black', opacity: 0.5 }
     ))
     this.add(line)
   }
@@ -49,5 +49,8 @@ export default class LineGeometry extends Group {
   update (props) {
     this.rotation.x += 0.0001
     this.rotation.y += 0.0001
+
+    // this.rotation.x = Math.random() / 10
+    // this.rotation.y = Math.random() / 10
   }
 }

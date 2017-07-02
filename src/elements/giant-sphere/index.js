@@ -1,23 +1,45 @@
 import {
-  Group, SphereGeometry, MeshNormalMaterial, Mesh
+  Group,
+  SphereGeometry,
+  BoxGeometry,
+  MeshNormalMaterial,
+  MeshBasicMaterial,
+  Mesh,
+  DoubleSide
 } from 'three'
 import bind from '@dlmanning/bind'
 
-export default class GiantSphere extends Group {
-  constructor () {
+export default class GiantContainer extends Group {
+  constructor (props = {}) {
     super()
 
     this.initialize = bind(this, this.initialize)
     this.update = bind(this, this.update)
 
-    this.initialize()
+    this.initialize(props)
   }
 
-  initialize () {
-    const Geometry = new SphereGeometry(75, 32, 32)
-    const Material = new MeshNormalMaterial({
-      wireframe: true
-    })
+  initialize (props) {
+    const {
+      radius = 75,
+      color,
+      wireframe = false,
+      shape = 'sphere'
+    } = props
+
+    const Geometry = shape === 'box'
+      ? new BoxGeometry(170, 170, 170, 32, 32, 32)
+      : new SphereGeometry(radius, 32, 32)
+
+    const Material = color != null
+      ? new MeshBasicMaterial({
+        color: color, wireframe
+      })
+      : new MeshNormalMaterial({
+        wireframe,
+        side: DoubleSide
+      })
+
     const sphere = new Mesh(Geometry, Material)
     this.add(sphere)
     this.sphere = sphere

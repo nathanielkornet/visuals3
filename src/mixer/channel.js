@@ -1,13 +1,16 @@
 export default class Channel {
   constructor (channelNum, midi, socket, scene) {
     this.state = {
-      opacity: 5,
-      isActive: false
+      opacity: 0.8,
+      isActive: true
     }
 
     this.channelNum = channelNum
 
-    this.setSource = (source) => { this.source = source }
+    this.setSource = (source) => {
+      this.source = source
+      scene.add(this.source)
+    }
     this.hasSource = () => this.source != null
     this.updateSource = (props) => {
       return this.source.update({...this.state, ...props})
