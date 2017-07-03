@@ -2,7 +2,7 @@ export default class Channel {
   constructor (channelNum, midi, socket, scene) {
     this.state = {
       opacity: 0,
-      isActive: true,
+      isActive: false,
       specialEffect: false
     }
 
