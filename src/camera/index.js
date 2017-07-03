@@ -118,10 +118,12 @@ export default class Camera extends PerspectiveCamera {
     } else if (cameraType === 3) {
       const { time } = props
 
+      const distance = 60
+
       newCameraPosition = {
-        x: Math.sin(time / 50000),
-        y: 0,
-        z: Math.cos(time / 50000)
+        x: distance * Math.sin(time / 5000),
+        y: distance * Math.sin(time / 500),
+        z: distance * Math.cos(time / 10000)
         // z: this.position.z + (0.005 * zoomZ * cameraSpeed.z)
       }
 

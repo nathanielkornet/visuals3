@@ -22,7 +22,7 @@ export default class LineGeometry extends Group {
   initialize () {
     const geometry = new Geometry()
 
-    const particleGeo = new SphereGeometry(0.1, 32, 32)
+    const particleGeo = new SphereGeometry(0.5, 32, 32)
     const particleMaterial = new MeshBasicMaterial({color: 'black'})
 
     for (let i = 0; i < 250; i++) {
@@ -33,7 +33,6 @@ export default class LineGeometry extends Group {
       particle.position.z = Math.random() * 2 - 1
       particle.position.normalize()
       particle.position.multiplyScalar(Math.random() * 60 + 10)
-      particle.scale.x = particle.scale.y = 10
       this.add(particle)
 
       geometry.vertices.push(particle.position)

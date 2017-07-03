@@ -1,7 +1,8 @@
 import {
   WebGLRenderer,
   Scene,
-  PerspectiveCamera
+  PerspectiveCamera,
+  Color
 } from 'three'
 import VRControls from './lib/vr/vr-controls'
 import VREffect from './lib/vr/vr-effect'
@@ -12,7 +13,8 @@ import {
   Spherez,
   LineGeometry,
   RandoPolys,
-  GiantSphere
+  GiantSphere,
+  CircleGlobe
 } from './elements'
 import bind from '@dlmanning/bind'
 const SocketIOClient = require('socket.io-client')
@@ -72,6 +74,7 @@ export default class Visuals {
     }
 
     const scene = new Scene()
+    // scene.background = new Color('white')
 
     this.mixer = new Mixer(8, this.midi, this.socket, scene)
 
@@ -81,10 +84,13 @@ export default class Visuals {
     this.mixer.channels[2].setSource(new RandoPolys())
     this.mixer.channels[3].setSource(new GiantSphere({
       wireframe: true,
-      shape: 'box',
       color: 'green'
     }))
     this.mixer.channels[4].setSource(new LineGeometry())
+    this.mixer.channels[5].setSource(new CircleGlobe({
+      circleRadius: 10,
+      circleSegments: 64
+    }))
 
     this.midi.logBindings()
 

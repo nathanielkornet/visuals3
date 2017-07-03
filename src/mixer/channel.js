@@ -1,8 +1,9 @@
 export default class Channel {
   constructor (channelNum, midi, socket, scene) {
     this.state = {
-      opacity: 0.8,
-      isActive: true
+      opacity: 0,
+      isActive: true,
+      specialEffect: false
     }
 
     this.channelNum = channelNum
@@ -25,6 +26,10 @@ export default class Channel {
       this.state.opacity = val
     }
 
+    this.setSpecialEffect = val => {
+      this.state.specialEffect = val
+    }
+
     if (midi != null) {
       this.initializeMidiBindings(midi, socket, scene)
     }
@@ -34,7 +39,7 @@ export default class Channel {
     const { channelNum } = this
 
     const faderId = `F${channelNum}`
-    // const switchId = `S${channelNum}`
+    const switchId = `S${channelNum}`
 
     midi.bind(faderId, val => {
       if (val === 0) {
@@ -49,6 +54,21 @@ export default class Channel {
       const newOpacity = (val / 127)
 
       this.setOpacity(newOpacity)
+
+      if (process.env.IS_HOST) {
+        socket.emit('update channel', {
+          channelNum,
+          ...this.state
+        })
+      }
+    })
+
+    midi.bind(switchId, val => {
+      if (val === 0) {
+        this.setSpecialEffect(false)
+      } else {
+        this.setSpecialEffect(true)
+      }
 
       if (process.env.IS_HOST) {
         socket.emit('update channel', {
