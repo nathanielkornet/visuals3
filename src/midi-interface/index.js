@@ -34,7 +34,6 @@ module.exports = class MidiInterface {
   }
 
   parseMessage (message) {
-    console.log('tf?')
     console.log(message)
 
     const status = message[0]
