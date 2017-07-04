@@ -121,9 +121,9 @@ export default class Camera extends PerspectiveCamera {
       const { time } = props
 
       newCameraPosition = {
-        x: cameraDistance * Math.sin(time / 1000),
-        y: cameraDistance * Math.sin(time / 500),
-        z: cameraDistance * Math.cos(time / 10000)
+        x: cameraDistance * Math.sin(time / 1010),
+        y: cameraDistance * Math.sin(time / 505),
+        z: cameraDistance * Math.cos(time / 10030)
       }
 
       this.lookAt(origin)

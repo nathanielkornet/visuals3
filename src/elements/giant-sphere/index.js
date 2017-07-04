@@ -43,15 +43,17 @@ export default class GiantContainer extends Group {
     const sphere = new Mesh(Geometry, Material)
     this.add(sphere)
     this.sphere = sphere
+
+    console.log(sphere)
   }
 
   update (props) {
     const {
-      opacity
+      opacity,
+      specialEffect
     } = props
 
-    const val = 0.001
-    this.rotation.y += val
+    this.rotation.y += specialEffect ? 0.0025 : 0.001
 
     this.sphere.material.transparent = true
     this.sphere.material.opacity = opacity

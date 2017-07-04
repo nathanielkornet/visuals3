@@ -11,6 +11,8 @@ export default class RandoPolys extends Group {
     this.update = bind(this, this.update)
 
     this.initialize()
+
+    this.materialType = 'basic'
   }
 
   initialize () {
@@ -22,7 +24,8 @@ export default class RandoPolys extends Group {
         maxDepth: 5 * Math.random() + 2,
         rotationX: 0.005 * Math.random(),
         rotationY: 0.005 * Math.random(),
-        rotationZ: 0.005 * Math.random()
+        rotationZ: 0.005 * Math.random(),
+        wireframe: true
       })
 
       randoPoly.position.x = Math.random() * 2 - 1
@@ -48,13 +51,19 @@ export default class RandoPolys extends Group {
     this.rotation.y += 0.0001
 
     this.children.forEach((poly, i) => {
-      // const theta = (0.002 * time) + (i / (this.children.length - 1)) * 2 * Math.PI * fuckFactor
-      // const chi = (0.002 * time) + (i / (this.children.length - 1)) * Math.PI * fuckFactor
-
-      // poly.position.x = spread * Math.cos(theta) * Math.sin(chi)
-      // poly.position.y = spread * Math.sin(theta) * Math.sin(chi)
-      // poly.position.z = spread * Math.cos(chi)
       poly.applyRotation()
+
+      if (specialEffect && this.materialType === 'basic') {
+        poly.switchToNormalMaterial()
+        if (i === this.children.length - 1) {
+          this.materialType = 'normal'
+        }
+      } else if (!specialEffect && this.materialType === 'normal') {
+        poly.switchToBasicMaterial()
+        if (i === this.children.length - 1) {
+          this.materialType = 'basic'
+        }
+      }
 
       poly.material.opacity = opacity
       poly.material.transparent = true

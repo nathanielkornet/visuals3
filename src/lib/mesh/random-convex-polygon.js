@@ -14,7 +14,6 @@ export default class RandomConvexPolygon extends Mesh {
       rotationX = 0.001,
       rotationY = 0.001,
       rotationZ = 0.001,
-      opacity = 1,
       color = 'white',
       wireframe = true,
       maxPoints = 50,
@@ -42,8 +41,7 @@ export default class RandomConvexPolygon extends Mesh {
 
     const material = new MeshMaterial({
       color,
-      wireframe,
-      opacity
+      wireframe
     })
 
     material.opacity = 0.55
@@ -55,11 +53,27 @@ export default class RandomConvexPolygon extends Mesh {
       y: rotationY,
       z: rotationZ
     }
+
+    // store original props in case we need to use them
+    this.originalProps = props
   }
 
   applyRotation () {
     this.rotation.x += this.rotationConsts.x
     this.rotation.y += this.rotationConsts.y
     this.rotation.z += this.rotationConsts.z
+  }
+
+  switchToNormalMaterial () {
+    this.material = new MeshNormalMaterial({
+      wireframe: false // this.originalProps.wireframe
+    })
+  }
+
+  switchToBasicMaterial () {
+    this.material = new MeshBasicMaterial({
+      color: this.originalProps.color,
+      wireframe: this.originalProps.wireframe
+    })
   }
 }
