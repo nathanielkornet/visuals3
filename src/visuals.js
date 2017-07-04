@@ -83,12 +83,12 @@ export default class Visuals {
     this.mixer.channels[1].setSource(new Spherez())
     this.mixer.channels[2].setSource(new RandoPolys())
     this.mixer.channels[3].setSource(new GiantSphere({
-      wireframe: true,
-      color: 'green'
+      wireframe: true
     }))
     this.mixer.channels[4].setSource(new LineGeometry())
     this.mixer.channels[5].setSource(new CircleGlobe({
-      circleRadius: 10,
+      numCircles: 20,
+      circleRadius: 5,
       circleSegments: 64
     }))
 

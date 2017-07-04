@@ -11,7 +11,8 @@ export default class Camera extends PerspectiveCamera {
       cameraSpeed: {x: 0, y: 0, z: 0},
       zoomZ: 0,
       cameraType: 1,
-      cameraRotationSpeed: 0
+      cameraRotationSpeed: 0,
+      cameraDistance: 60
     }
 
     this.initializeMidiBindings = bind(this, this.initializeMidiBindings)
@@ -36,7 +37,7 @@ export default class Camera extends PerspectiveCamera {
       })
     }
 
-    this.position.set(0, 0, 0)
+    this.position.set(0, 0, 100)
     this.lookAt(origin)
   }
 
@@ -94,7 +95,8 @@ export default class Camera extends PerspectiveCamera {
     const {
       cameraSpeed,
       cameraRotationSpeed,
-      cameraType
+      cameraType,
+      cameraDistance
       // zoomZ
     } = this.state
 
@@ -118,13 +120,10 @@ export default class Camera extends PerspectiveCamera {
     } else if (cameraType === 3) {
       const { time } = props
 
-      const distance = 60
-
       newCameraPosition = {
-        x: distance * Math.sin(time / 5000),
-        y: distance * Math.sin(time / 500),
-        z: distance * Math.cos(time / 10000)
-        // z: this.position.z + (0.005 * zoomZ * cameraSpeed.z)
+        x: cameraDistance * Math.sin(time / 1000),
+        y: cameraDistance * Math.sin(time / 500),
+        z: cameraDistance * Math.cos(time / 10000)
       }
 
       this.lookAt(origin)

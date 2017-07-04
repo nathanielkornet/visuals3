@@ -10,7 +10,7 @@ export default class Channel {
 
     this.setSource = (source) => {
       this.source = source
-      scene.add(this.source)
+      // scene.add(this.source)
     }
     this.hasSource = () => this.source != null
     this.updateSource = (props) => {
@@ -47,6 +47,7 @@ export default class Channel {
         scene.remove(this.source)
       } else {
         if (!this.isActive() && this.hasSource()) {
+          console.log('add')
           this.setActive(true)
           scene.add(this.source)
         }

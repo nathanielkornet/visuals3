@@ -26,11 +26,11 @@ export default class CircleGlobe extends Group {
       ? new MeshBasicMaterial({color, wireframe: true})
       : new MeshNormalMaterial({wireframe: true})
 
-    const spherez = []
+    const circlez = []
 
     for (let i = 0; i < numCircles * numCircles; i++) {
-      const sphere = new Mesh(Geometry, Material)
-      spherez.push(sphere)
+      const circle = new Mesh(Geometry, Material)
+      circlez.push(circle)
     }
 
     for (let i = 0; i < numCircles; i++) {
@@ -38,15 +38,15 @@ export default class CircleGlobe extends Group {
       for (let j = 0; j < numCircles; j++) {
         const theta = (j / numCircles) * 2 * Math.PI
         const index = i * numCircles + j
-        const sphere = spherez[index]
+        const circle = circlez[index]
 
-        sphere.position.x = 30 * Math.cos(theta) * Math.sin(chi)
-        sphere.position.y = 30 * Math.sin(theta) * Math.sin(chi)
-        sphere.position.z = 30 * Math.cos(chi)
+        circle.position.x = 30 * Math.cos(theta) * Math.sin(chi)
+        circle.position.y = 30 * Math.sin(theta) * Math.sin(chi)
+        circle.position.z = 30 * Math.cos(chi)
 
-        sphere.lookAt(new Vector3(0, 0, 0))
+        circle.lookAt(new Vector3(0, 0, 0))
 
-        this.add(sphere)
+        this.add(circle)
       }
     }
   }
@@ -63,9 +63,14 @@ export default class CircleGlobe extends Group {
     const val = 0.001
     this.rotation.y += val
 
+    this.children.forEach((circle, i) => {
+      circle.material.opacity = opacity
+      circle.material.transparent = true
+    })
+
     if (specialEffect) {
-      this.children.forEach((sphere, i) => {
-        sphere.rotation.y += 0.01
+      this.children.forEach((circle, i) => {
+        circle.rotation.y += 0.01
       })
     }
   }

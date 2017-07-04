@@ -5,7 +5,8 @@ import {
   Mesh,
   MeshBasicMaterial,
   Line,
-  LineBasicMaterial
+  LineBasicMaterial,
+  Color
 } from 'three'
 import bind from '@dlmanning/bind'
 
@@ -22,7 +23,7 @@ export default class LineGeometry extends Group {
   initialize () {
     const geometry = new Geometry()
 
-    const particleGeo = new SphereGeometry(0.5, 32, 32)
+    const particleGeo = new SphereGeometry(0.25, 32, 32)
     const particleMaterial = new MeshBasicMaterial({color: 'black'})
 
     for (let i = 0; i < 250; i++) {
@@ -46,8 +47,28 @@ export default class LineGeometry extends Group {
   }
 
   update (props) {
+    const {
+      opacity,
+      specialEffect
+    } = props
+
     this.rotation.x += 0.0001
     this.rotation.y += 0.0001
+
+    if (specialEffect) {
+      this.children.forEach(child => {
+        child.material.color = new Color('white')
+      })
+    } else {
+      this.children.forEach(child => {
+        child.material.color = new Color('black')
+      })
+    }
+
+    this.children.forEach(child => {
+      child.material.opacity = opacity
+      child.material.transparent = true
+    })
 
     // this.rotation.x = Math.random() / 10
     // this.rotation.y = Math.random() / 10

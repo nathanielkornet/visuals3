@@ -11,6 +11,9 @@ export default class RandomConvexPolygon extends Mesh {
       maxHeight = 10,
       maxWidth = 10,
       maxDepth = 10,
+      rotationX = 0.001,
+      rotationY = 0.001,
+      rotationZ = 0.001,
       opacity = 1,
       color = 'white',
       wireframe = true,
@@ -46,5 +49,17 @@ export default class RandomConvexPolygon extends Mesh {
     material.opacity = 0.55
 
     super(geometry, material)
+
+    this.rotationConsts = {
+      x: rotationX,
+      y: rotationY,
+      z: rotationZ
+    }
+  }
+
+  applyRotation () {
+    this.rotation.x += this.rotationConsts.x
+    this.rotation.y += this.rotationConsts.y
+    this.rotation.z += this.rotationConsts.z
   }
 }

@@ -15,8 +15,8 @@ export default class Spherez extends Group {
 
   initialize () {
     // up to 2000
-    const numSpheres = 25
-    const Geometry = new SphereGeometry(5, 32, 32)
+    const numSpheres = 100
+    const Geometry = new SphereGeometry(3, 32, 32)
     const Material = new MeshNormalMaterial()
 
     for (let i = 0; i < numSpheres; i++) {
@@ -37,8 +37,16 @@ export default class Spherez extends Group {
     this.rotation.y += val
 
     this.children.forEach((sphere, i) => {
-      const theta = (0.001 * time) + (i / (this.children.length - 1)) * 2 * Math.PI * fuckFactor
-      const chi = (0.001 * time) + (i / (this.children.length - 1)) * Math.PI * fuckFactor
+      let theta
+      let chi
+      if (i % 2 === 0) {
+        theta = (0.001 * time) + (i / (this.children.length - 1)) * 2 * Math.PI * fuckFactor
+        chi = (0.001 * time) + (i / (this.children.length - 1)) * Math.PI * fuckFactor
+      } else {
+        theta = (0.001 * time) + (i / (this.children.length - 1)) * 2 * Math.PI * fuckFactor * 2
+        chi = (0.001 * time) + (i / (this.children.length - 1)) * Math.PI * fuckFactor * 2
+      }
+
 
       sphere.position.x = spread * Math.cos(theta) * Math.sin(chi)
       sphere.position.y = spread * Math.sin(theta) * Math.sin(chi)
