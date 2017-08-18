@@ -21,7 +21,7 @@ export default class GiantContainer extends Group {
 
   initialize (props) {
     const {
-      radius = 75,
+      radius = 85,
       color,
       wireframe = false,
       shape = 'sphere'

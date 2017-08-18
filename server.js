@@ -7,6 +7,9 @@ app.use(Express.static(__dirname + '/dist'))
 
 io.on('connection', function (socket) {
   console.log('a user connected')
+
+  // socket.emit('initial-state', initialState)
+
   socket.on('test', function (data) {
     console.log(data)
     socket.broadcast.emit('test', data)

@@ -85,8 +85,14 @@ export default class Visuals {
     this.mixer.channels[3].setSource(new GiantSphere({
       wireframe: true
     }))
-    this.mixer.channels[4].setSource(new LineGeometry())
-    this.mixer.channels[5].setSource(new CircleGlobe({
+    this.mixer.channels[4].setSource(new GiantSphere({
+      wireframe: true,
+      shape: 'box',
+      color: 'green',
+      radius: 100
+    }))
+    this.mixer.channels[5].setSource(new LineGeometry())
+    this.mixer.channels[6].setSource(new CircleGlobe({
       numCircles: 20,
       circleRadius: 5,
       circleSegments: 64
@@ -131,8 +137,7 @@ export default class Visuals {
     }
     window.requestAnimationFrame(this.render)
 
-    const date = new Date()
-    const time = date.getTime() / 1000 * 60
+    const time = Date.now() / 1000 * 60
 
     // "get mixer output" aka update the various visuals
     mixer.getOutput({time})

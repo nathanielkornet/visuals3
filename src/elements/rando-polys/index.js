@@ -46,9 +46,9 @@ export default class RandoPolys extends Group {
       specialEffect
     } = props
 
-    this.rotation.y += 0.0001
-    this.rotation.x += 0.0001
-    this.rotation.y += 0.0001
+    this.rotation.y = 0.0002
+    this.rotation.x = 0.0001
+    this.rotation.y = 0.0001
 
     this.children.forEach((poly, i) => {
       poly.applyRotation()
