@@ -11,3 +11,7 @@ export { default as RandoPolys } from './rando-polys'
 export { default as Spherez } from './spherez'
 
 export { default as TriangleLand } from './triangle-land'
+
+export { default as Eclipse } from './eclipse'
+
+export { default as Fluid } from './fluid'

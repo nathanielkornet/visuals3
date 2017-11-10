@@ -18,15 +18,17 @@ module.exports = class MidiInterface {
       if (err) console.error(err)
 
       const input = webmidi.inputs[1]
-      input.addListener('controlchange', 'all', ev => {
-        this.parseMessage(ev.data)
-      })
-      input.addListener('noteon', 'all', ev => {
-        this.parseMessage(ev.data)
-      })
-      input.addListener('noteoff', 'all', ev => {
-        this.parseMessage(ev.data)
-      })
+      if (input != null) {
+        input.addListener('controlchange', 'all', ev => {
+          this.parseMessage(ev.data)
+        })
+        input.addListener('noteon', 'all', ev => {
+          this.parseMessage(ev.data)
+        })
+        input.addListener('noteoff', 'all', ev => {
+          this.parseMessage(ev.data)
+        })
+      }
     })
 
     // store of onChange handlers

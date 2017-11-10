@@ -29,11 +29,13 @@ export default class Mixer {
 
     if (process.env.IS_GUEST) {
       socket.on('update channel', data => {
+        console.log('update channel client')
         const channelIdx = data.channelNum - 1
         this.channels[channelIdx].setOpacity(data.opacity)
       })
 
       socket.on('update mixer', data => {
+        console.log('update mix client')
         this.state.spread = data.spread
         this.state.fuckFactor = data.fuckFactor
       })
@@ -103,6 +105,7 @@ export default class Mixer {
         (this.state.fuckFactorSpeed * this.state.fuckFactorSpeedApply)
 
       if (process.env.IS_HOST) {
+        console.log('update mix host')
         this.socket.emit('update mixer', {
           spread: this.state.spread,
           fuckFactor: this.state.fuckFactor

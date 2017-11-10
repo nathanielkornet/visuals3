@@ -14,7 +14,9 @@ import {
   LineGeometry,
   RandoPolys,
   GiantSphere,
-  CircleGlobe
+  CircleGlobe,
+  Eclipse,
+  Fluid
 } from './elements'
 import bind from '@dlmanning/bind'
 const SocketIOClient = require('socket.io-client')
@@ -79,7 +81,10 @@ export default class Visuals {
     this.mixer = new Mixer(8, this.midi, this.socket, scene)
 
     // set mixer channel input sources, add source to scene
-    this.mixer.channels[0].setSource(new TriangleLand())
+    // this.mixer.channels[0].setSource(new TriangleLand())
+    // this.mixer.channels[0].setSource(new Eclipse())
+    this.mixer.channels[0].setSource(new Fluid())
+
     this.mixer.channels[1].setSource(new Spherez())
     this.mixer.channels[2].setSource(new RandoPolys())
     this.mixer.channels[3].setSource(new GiantSphere({
@@ -98,7 +103,7 @@ export default class Visuals {
       circleSegments: 64
     }))
 
-    this.midi.logBindings()
+    // this.midi.logBindings()
 
     // const lineGeo = new LineGeometry()
     // mixer.channels[2].setInput(lineGeo)
