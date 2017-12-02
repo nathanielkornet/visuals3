@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/nathanielkornet/visuals#readme",
   "dependencies": {
+    "electron": "^1.7.9",
     "express": "^4.15.3",
     "quickhull3d": "^2.0.0",
     "socket.io": "^2.0.3",

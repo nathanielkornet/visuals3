@@ -4,6 +4,7 @@ import {
   PerspectiveCamera,
   Color
 } from 'three'
+import CanvasRenderer from './canvas-renderer'
 import VRControls from './lib/vr/vr-controls'
 import VREffect from './lib/vr/vr-effect'
 import Camera from './camera'
@@ -31,7 +32,7 @@ export default class Visuals {
     this.render = bind(this, this.render)
 
     if (process.env.IS_HOST) {
-      this.socket = new SocketIOClient('http://localhost:9001')
+      this.socket = new SocketIOClient('http://localhost:8888')
       this.socket.open()
       this.socket.emit('test', 'hello from the host, socket world')
     } else if (process.env.IS_GUEST) {
@@ -54,7 +55,7 @@ export default class Visuals {
   initializeRenderer () {
     const { midi, socket } = this
 
-    const renderer = new WebGLRenderer({antialias: false})
+    const renderer = new WebGLRenderer()
     renderer.setSize(window.innerWidth, window.innerHeight)
     // renderer.setPixelRatio(Math.floor(window.devicePixelRatio))
     document.body.appendChild(renderer.domElement)
@@ -98,7 +99,7 @@ export default class Visuals {
       circleSegments: 64
     }))
 
-    this.midi.logBindings()
+    // this.midi.logBindings()
 
     // const lineGeo = new LineGeometry()
     // mixer.channels[2].setInput(lineGeo)

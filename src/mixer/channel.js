@@ -24,6 +24,16 @@ export default class Channel {
 
     this.setOpacity = (val) => {
       this.state.opacity = val
+
+      if (val === 0) {
+        this.setActive(false)
+        scene.remove(this.source)
+      } else {
+        if (!this.isActive() && this.hasSource()) {
+          this.setActive(true)
+          scene.add(this.source)
+        }
+      }
     }
 
     this.setSpecialEffect = val => {
@@ -42,16 +52,6 @@ export default class Channel {
     const switchId = `S${channelNum}`
 
     midi.bind(faderId, val => {
-      if (val === 0) {
-        this.setActive(false)
-        scene.remove(this.source)
-      } else {
-        if (!this.isActive() && this.hasSource()) {
-          console.log('add')
-          this.setActive(true)
-          scene.add(this.source)
-        }
-      }
       const newOpacity = (val / 127)
 
       this.setOpacity(newOpacity)

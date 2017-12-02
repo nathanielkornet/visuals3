@@ -28,6 +28,6 @@ io.on('connection', function (socket) {
   })
 })
 
-http.listen(9001, function () {
-  console.log('Server running on port 9001')
+http.listen(8888, function () {
+  console.log('Server running on port 8888')
 })

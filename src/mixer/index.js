@@ -31,6 +31,8 @@ export default class Mixer {
       socket.on('update channel', data => {
         const channelIdx = data.channelNum - 1
         this.channels[channelIdx].setOpacity(data.opacity)
+        this.channels[channelIdx].setActive(data.isActive)
+        this.channels[channelIdx].setSpecialEffect(data.specialEffect)
       })
 
       socket.on('update mixer', data => {
