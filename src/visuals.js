@@ -3,6 +3,7 @@ import {
   Scene,
   PerspectiveCamera
 } from 'three'
+import CanvasRenderer from './canvas-renderer'
 import VRControls from './lib/vr/vr-controls'
 import VREffect from './lib/vr/vr-effect'
 import Camera from './camera'
