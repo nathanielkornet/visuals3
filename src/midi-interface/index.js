@@ -17,7 +17,9 @@ module.exports = class MidiInterface {
     webmidi.enable(err => {
       if (err) console.error(err)
 
-      const input = webmidi.inputs[1]
+      const input = webmidi.inputs[0]
+      console.log(webmidi.inputs)
+      console.log(input)
       input.addListener('controlchange', 'all', ev => {
         this.parseMessage(ev.data)
       })
