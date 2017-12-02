@@ -43,8 +43,6 @@ export default class GiantContainer extends Group {
     const sphere = new Mesh(Geometry, Material)
     this.add(sphere)
     this.sphere = sphere
-
-    console.log(sphere)
   }
 
   update (props) {
