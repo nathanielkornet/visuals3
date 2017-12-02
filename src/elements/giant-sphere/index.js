@@ -21,7 +21,7 @@ export default class GiantContainer extends Group {
 
   initialize (props) {
     const {
-      radius = 75,
+      radius = 85,
       color,
       wireframe = false,
       shape = 'sphere'
@@ -43,8 +43,6 @@ export default class GiantContainer extends Group {
     const sphere = new Mesh(Geometry, Material)
     this.add(sphere)
     this.sphere = sphere
-
-    console.log(sphere)
   }
 
   update (props) {

@@ -9,7 +9,7 @@ export default class Camera extends PerspectiveCamera {
 
     this.state = {
       cameraSpeed: {x: 0, y: 0, z: 0},
-      zoomZ: 0,
+      zoom: {x: 0, y: 0, z: 0},
       cameraType: 1,
       cameraRotationSpeed: 0,
       cameraDistance: 60
@@ -57,38 +57,47 @@ export default class Camera extends PerspectiveCamera {
       this.state.cameraType = 3
     })
 
-    midi.bind('B5', () => {
-      // kill zoom
-      this.state.cameraSpeed = {x: 0, y: 0, z: 0}
-    })
-
     // roation speed (in camera 2 view)
     midi.bind('K8', val => {
       this.state.cameraRotationSpeed = val - 64
     })
 
-    // Joystick X: camera X
+    // zoom speed
+    // x
     midi.bind('K5', val => {
-      this.state.cameraSpeed.x = val - 64
+      this.state.cameraSpeed.x = val
     })
-    // Joystick Y: camera Y
+    // y
     midi.bind('K6', val => {
-      this.state.cameraSpeed.y = val - 64
+      this.state.cameraSpeed.y = val
+    })
+    // z
+    midi.bind('K7', val => {
+      this.state.cameraSpeed.z = val
     })
 
-    // Camera zoom
-    // speed
-    midi.bind('K7', val => {
-      this.state.cameraSpeed.z = val - 64
+    // zoom in/out toggles
+    // x
+    midi.bind('PA5', val => {
+      this.state.zoom.x = val > 0 ? 1 : 0
     })
-    // // in toggle
-    // midi.bind('PA1', val => {
-    //   this.state.zoomZ = val > 0 ? 1 : 0
-    // })
-    // // out toggle
-    // midi.bind('PA5', val => {
-    //   this.state.zoomZ = val > 0 ? -1 : 0
-    // })
+    midi.bind('PA1', val => {
+      this.state.zoom.x = val > 0 ? -1 : 0
+    })
+    // y
+    midi.bind('PA6', val => {
+      this.state.zoom.y = val > 0 ? 1 : 0
+    })
+    midi.bind('PA2', val => {
+      this.state.zoom.y = val > 0 ? -1 : 0
+    })
+    // z
+    midi.bind('PA7', val => {
+      this.state.zoom.z = val > 0 ? 1 : 0
+    })
+    midi.bind('PA3', val => {
+      this.state.zoom.z = val > 0 ? -1 : 0
+    })
   }
 
   update (props) {
@@ -96,17 +105,16 @@ export default class Camera extends PerspectiveCamera {
       cameraSpeed,
       cameraRotationSpeed,
       cameraType,
-      cameraDistance
-      // zoomZ
+      cameraDistance,
+      zoom
     } = this.state
 
     let newCameraPosition = {x: 0, y: 0, z: 0}
     if (cameraType === 1) {
       newCameraPosition = {
-        x: this.position.x + (0.001 * cameraSpeed.x),
-        y: this.position.y + (0.001 * cameraSpeed.y),
-        z: this.position.z - (0.005 * cameraSpeed.z)
-        // z: this.position.z + (0.005 * zoomZ * cameraSpeed.z)
+        x: this.position.x + (0.001 * zoom.x * cameraSpeed.x),
+        y: this.position.y + (0.001 * zoom.y * cameraSpeed.y),
+        z: this.position.z - (0.005 * zoom.z * cameraSpeed.z)
       }
 
       this.position.set(newCameraPosition.x, newCameraPosition.y, newCameraPosition.z)
@@ -123,7 +131,7 @@ export default class Camera extends PerspectiveCamera {
       newCameraPosition = {
         x: cameraDistance * Math.sin(time / 1010),
         y: cameraDistance * Math.sin(time / 505),
-        z: cameraDistance * Math.cos(time / 10030)
+        z: cameraDistance * Math.cos(time / 8030)
       }
 
       this.lookAt(origin)

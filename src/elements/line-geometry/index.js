@@ -49,6 +49,7 @@ export default class LineGeometry extends Group {
   update (props) {
     const {
       opacity,
+      fuckFactor,
       specialEffect
     } = props
 

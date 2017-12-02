@@ -31,6 +31,8 @@ export default class Mixer {
       socket.on('update channel', data => {
         const channelIdx = data.channelNum - 1
         this.channels[channelIdx].setOpacity(data.opacity)
+        this.channels[channelIdx].setActive(data.isActive)
+        this.channels[channelIdx].setSpecialEffect(data.specialEffect)
       })
 
       socket.on('update mixer', data => {
@@ -48,7 +50,7 @@ export default class Mixer {
       this.state.spreadSpeed = val / 127
     })
     // dec spread
-    midi.bind('PA1', val => {
+    midi.bind('PB1', val => {
       if (val > 0) {
         this.state.spreadSpeedApply = -1
       } else {
@@ -56,7 +58,7 @@ export default class Mixer {
       }
     })
     // inc spread
-    midi.bind('PA5', val => {
+    midi.bind('PB5', val => {
       if (val > 0) {
         this.state.spreadSpeedApply = 1
       } else {
@@ -69,7 +71,7 @@ export default class Mixer {
       this.state.fuckFactorSpeed = (val / 127 / 100)
     })
     // dec fuckFactor
-    midi.bind('PA2', val => {
+    midi.bind('PB2', val => {
       if (val > 0) {
         this.state.fuckFactorSpeedApply = -1
       } else {
@@ -77,7 +79,7 @@ export default class Mixer {
       }
     })
     // inc fuckFactor
-    midi.bind('PA6', val => {
+    midi.bind('PB6', val => {
       if (val > 0) {
         this.state.fuckFactorSpeedApply = 1
       } else {

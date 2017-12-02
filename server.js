@@ -7,6 +7,9 @@ app.use(Express.static(__dirname + '/dist'))
 
 io.on('connection', function (socket) {
   console.log('a user connected')
+
+  // socket.emit('initial-state', initialState)
+
   socket.on('test', function (data) {
     console.log(data)
     socket.broadcast.emit('test', data)
@@ -25,6 +28,6 @@ io.on('connection', function (socket) {
   })
 })
 
-http.listen(9001, function () {
-  console.log('Server running on port 9001')
+http.listen(8888, function () {
+  console.log('Server running on port 8888')
 })

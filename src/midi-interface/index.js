@@ -17,7 +17,12 @@ module.exports = class MidiInterface {
     webmidi.enable(err => {
       if (err) console.error(err)
 
-      const input = webmidi.inputs[1]
+      if (webmidi.inputs.length > 1) {
+        console.warn('Multiple midi inputs detected. You may want to log webmidi.inputs to be sure the right input is being used.')
+      }
+
+      const input = webmidi.inputs[0]
+
       input.addListener('controlchange', 'all', ev => {
         this.parseMessage(ev.data)
       })

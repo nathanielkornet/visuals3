@@ -1,8 +1,7 @@
 import {
   WebGLRenderer,
   Scene,
-  PerspectiveCamera,
-  Color
+  PerspectiveCamera
 } from 'three'
 import VRControls from './lib/vr/vr-controls'
 import VREffect from './lib/vr/vr-effect'
@@ -31,7 +30,7 @@ export default class Visuals {
     this.render = bind(this, this.render)
 
     if (process.env.IS_HOST) {
-      this.socket = new SocketIOClient('http://localhost:9001')
+      this.socket = new SocketIOClient('http://localhost:8888')
       this.socket.open()
       this.socket.emit('test', 'hello from the host, socket world')
     } else if (process.env.IS_GUEST) {
@@ -54,7 +53,7 @@ export default class Visuals {
   initializeRenderer () {
     const { midi, socket } = this
 
-    const renderer = new WebGLRenderer({antialias: false})
+    const renderer = new WebGLRenderer()
     renderer.setSize(window.innerWidth, window.innerHeight)
     // renderer.setPixelRatio(Math.floor(window.devicePixelRatio))
     document.body.appendChild(renderer.domElement)
@@ -85,14 +84,20 @@ export default class Visuals {
     this.mixer.channels[3].setSource(new GiantSphere({
       wireframe: true
     }))
-    this.mixer.channels[4].setSource(new LineGeometry())
-    this.mixer.channels[5].setSource(new CircleGlobe({
+    this.mixer.channels[4].setSource(new GiantSphere({
+      wireframe: true,
+      shape: 'box',
+      color: 'green',
+      radius: 100
+    }))
+    this.mixer.channels[5].setSource(new LineGeometry())
+    this.mixer.channels[6].setSource(new CircleGlobe({
       numCircles: 20,
       circleRadius: 5,
       circleSegments: 64
     }))
 
-    this.midi.logBindings()
+    // this.midi.logBindings()
 
     // const lineGeo = new LineGeometry()
     // mixer.channels[2].setInput(lineGeo)
@@ -131,8 +136,7 @@ export default class Visuals {
     }
     window.requestAnimationFrame(this.render)
 
-    const date = new Date()
-    const time = date.getTime() / 1000 * 60
+    const time = Date.now() / 1000 * 60
 
     // "get mixer output" aka update the various visuals
     mixer.getOutput({time})

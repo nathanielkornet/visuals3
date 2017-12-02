@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/nathanielkornet/visuals#readme",
   "dependencies": {
+    "electron": "^1.7.9",
     "express": "^4.15.3",
     "quickhull3d": "^2.0.0",
     "socket.io": "^2.0.3",
@@ -38,6 +39,7 @@
     "babel-plugin-transform-class-properties": "^6.6.0",
     "babel-plugin-transform-object-rest-spread": "6.23.0",
     "babel-preset-es2016-node5": "^1.1.2",
+    "cross-env": "^5.0.5",
     "electron-connect": "^0.3.0",
     "electron-packager": "^4.1.3",
     "electron-prebuilt-compile": "^1.6.11",
