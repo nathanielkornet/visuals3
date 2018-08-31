@@ -17,21 +17,25 @@ module.exports = class MidiInterface {
     webmidi.enable(err => {
       if (err) console.error(err)
 
-      if (webmidi.inputs.length > 1) {
-        console.warn('Multiple midi inputs detected. You may want to log webmidi.inputs to be sure the right input is being used.')
+      if (webmidi.inputs.length === 0) {
+        console.warn('No midi controller detected')
+      } else {
+        if (webmidi.inputs.length > 1) {
+          console.warn('Multiple midi inputs detected. You may want to log webmidi.inputs to be sure the right input is being used.')
+        }
+
+        const input = webmidi.inputs[0]
+
+        input.addListener('controlchange', 'all', ev => {
+          this.parseMessage(ev.data)
+        })
+        input.addListener('noteon', 'all', ev => {
+          this.parseMessage(ev.data)
+        })
+        input.addListener('noteoff', 'all', ev => {
+          this.parseMessage(ev.data)
+        })
       }
-
-      const input = webmidi.inputs[0]
-
-      input.addListener('controlchange', 'all', ev => {
-        this.parseMessage(ev.data)
-      })
-      input.addListener('noteon', 'all', ev => {
-        this.parseMessage(ev.data)
-      })
-      input.addListener('noteoff', 'all', ev => {
-        this.parseMessage(ev.data)
-      })
     })
 
     // store of onChange handlers
