@@ -82,7 +82,6 @@ export default class Mixer {
     })
     // inc fuckFactor
     midi.bind('PB6', val => {
-      console.log('incdfa')
       if (val > 0) {
         this.state.fuckFactorSpeedApply = 1
       } else {
@@ -116,8 +115,6 @@ export default class Mixer {
         (this.state.spreadSpeed * this.state.spreadSpeedApply)
       this.state.fuckFactor +=
         (this.state.fuckFactorSpeed * this.state.fuckFactorSpeedApply)
-
-      console.log('ff', this.state.fuckFactor)
 
       if (process.env.IS_HOST) {
         this.socket.emit('update mixer', {

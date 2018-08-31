@@ -15,7 +15,10 @@ import {
   RandoPolys,
   GiantSphere,
   CircleGlobe,
-  Sandbox
+  Sandbox,
+  HeardYouLikeCubes,
+  Flow,
+  Grid
 } from './elements'
 import bind from '@dlmanning/bind'
 const SocketIOClient = require('socket.io-client')
@@ -105,7 +108,7 @@ export default class Visuals {
         circleRadius: 5,
         circleSegments: 64
       }))
-      this.mixer.channels[7].setSource(new Sandbox())
+      this.mixer.channels[7].setSource(new Grid())
 
       // this.midi.logBindings()
     }

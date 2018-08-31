@@ -8,6 +8,8 @@ export { default as Flow } from './flow'
 
 export { default as GiantSphere } from './giant-sphere'
 
+export { default as Grid } from './grid'
+
 export { default as LineGeometry } from './line-geometry'
 
 export { default as RandoPolys } from './rando-polys'
