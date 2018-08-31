@@ -9,7 +9,9 @@ export default class Mixer {
       spreadSpeedApply: 0,
       fuckFactor: 1,
       fuckFactorSpeed: 0,
-      fuckFactorSpeedApply: 0
+      fuckFactorSpeedApply: 0,
+      speedA: 1,
+      speedB: 1
     }
 
     this.channels = []
@@ -85,6 +87,16 @@ export default class Mixer {
       } else {
         this.state.fuckFactorSpeedApply = 0
       }
+    })
+
+    // speedA
+    midi.bind('K3', val => {
+      this.state.speedA = val / 64
+    })
+
+    // speedB
+    midi.bind('K4', val => {
+      this.state.speedB = val / 64
     })
   }
 

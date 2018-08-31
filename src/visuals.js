@@ -1,7 +1,8 @@
 import {
   WebGLRenderer,
   Scene,
-  PerspectiveCamera
+  PerspectiveCamera,
+  Color
 } from 'three'
 import VRControls from './lib/vr/vr-controls'
 import VREffect from './lib/vr/vr-effect'
@@ -13,7 +14,11 @@ import {
   LineGeometry,
   RandoPolys,
   GiantSphere,
-  CircleGlobe
+  CircleGlobe,
+  Sandbox,
+  HeardYouLikeCubes,
+  Flow,
+  Grid
 } from './elements'
 import bind from '@dlmanning/bind'
 const SocketIOClient = require('socket.io-client')
@@ -73,35 +78,40 @@ export default class Visuals {
     }
 
     const scene = new Scene()
-    // scene.background = new Color('white')
+    scene.background = new Color('#000')
 
-    this.mixer = new Mixer(8, this.midi, this.socket, scene)
+    if (process.env.SANDBOX) {
+      // enter sandbox mode
+      this.mixer = new Mixer(1, this.midi, this.socket, scene)
+      const sandbox = this.mixer.channels[0]
+      sandbox.setSource(new Sandbox())
+      sandbox.setOpacity(0.85)
+    } else {
+      this.mixer = new Mixer(8, this.midi, this.socket, scene)
 
-    // set mixer channel input sources, add source to scene
-    this.mixer.channels[0].setSource(new TriangleLand())
-    this.mixer.channels[1].setSource(new Spherez())
-    this.mixer.channels[2].setSource(new RandoPolys())
-    this.mixer.channels[3].setSource(new GiantSphere({
-      wireframe: true
-    }))
-    this.mixer.channels[4].setSource(new GiantSphere({
-      wireframe: true,
-      shape: 'box',
-      color: 'green',
-      radius: 100
-    }))
-    this.mixer.channels[5].setSource(new LineGeometry())
-    this.mixer.channels[6].setSource(new CircleGlobe({
-      numCircles: 20,
-      circleRadius: 5,
-      circleSegments: 64
-    }))
+      // set mixer channel input sources, add source to scene
+      this.mixer.channels[0].setSource(new TriangleLand())
+      this.mixer.channels[1].setSource(new Spherez())
+      this.mixer.channels[2].setSource(new RandoPolys())
+      this.mixer.channels[3].setSource(new GiantSphere({
+        wireframe: true
+      }))
+      this.mixer.channels[4].setSource(new GiantSphere({
+        wireframe: true,
+        shape: 'box',
+        color: 'green',
+        radius: 100
+      }))
+      this.mixer.channels[5].setSource(new LineGeometry())
+      this.mixer.channels[6].setSource(new CircleGlobe({
+        numCircles: 20,
+        circleRadius: 5,
+        circleSegments: 64
+      }))
+      this.mixer.channels[7].setSource(new Grid())
 
-    // this.midi.logBindings()
-
-    // const lineGeo = new LineGeometry()
-    // mixer.channels[2].setInput(lineGeo)
-    // scene.add(lineGeo)
+      // this.midi.logBindings()
+    }
 
     this.renderer = renderer
     this.camera = camera

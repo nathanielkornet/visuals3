@@ -119,6 +119,7 @@ export default class Camera extends PerspectiveCamera {
 
       this.position.set(newCameraPosition.x, newCameraPosition.y, newCameraPosition.z)
     } else if (cameraType === 2) {
+      this.position.set(0, 0, 0)
       let newRotation = 0
       if (cameraType === 2) {
         // apply rotation
