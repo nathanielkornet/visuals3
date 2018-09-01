@@ -5,7 +5,7 @@
   "main": "init.js",
   "scripts": {
     "start": "electron app.js",
-    "sandbox": "cross-env SANDBOX=true npm start",
+    "sandbox": "cross-env SANDBOX=true DEV_MODE=true npm start",
     "dev": "cross-env DEV_MODE=true npm start",
     "host": "cross-env IS_HOST=true npm start",
     "host-dev": "cross-env DEV_MODE=true npm run host",

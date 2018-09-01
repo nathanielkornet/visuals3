@@ -2,6 +2,8 @@ export { default as Atom } from './atom'
 
 export { default as CircleGlobe } from './circle-globe'
 
+export { default as Debris } from './debris'
+
 export { default as HeardYouLikeCubes } from './cubes'
 
 export { default as Flow } from './flow'

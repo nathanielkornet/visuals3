@@ -1,5 +1,6 @@
 import AfterImage from './afterimage'
 import Dotify from './dotify'
+import Edgey from './edgey'
 import RGBShift from './rgb-shift'
 
 export default class Effects {
@@ -13,8 +14,9 @@ export default class Effects {
     this.render.bind(this)
 
     this.addEffect(new Dotify().effect)
-    this.addEffect(new RGBShift().effect)
-    this.addEffect(new AfterImage().effect)
+    // this.addEffect(new RGBShift().effect)
+    // this.addEffect(new AfterImage().effect)
+    this.addEffect(new Edgey().effect)
 
     console.log('effect composer', this.composer)
   }
