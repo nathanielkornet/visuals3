@@ -10,7 +10,7 @@ export default class Camera extends PerspectiveCamera {
     this.state = {
       cameraSpeed: {x: 0, y: 0, z: 0},
       zoom: {x: 0, y: 0, z: 0},
-      cameraType: 1,
+      cameraType: 3,
       cameraRotationSpeed: 0,
       cameraDistance: 60
     }
@@ -37,7 +37,7 @@ export default class Camera extends PerspectiveCamera {
       })
     }
 
-    this.position.set(0, 0, 100)
+    this.position.set(0, 0, 10)
     this.lookAt(origin)
   }
 

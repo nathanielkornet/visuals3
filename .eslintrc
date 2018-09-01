@@ -1,6 +1,7 @@
 {
   "globals": {
-    "$env": true
+    "$env": true,
+    "THREE": true
   },
   "extends": ["esmanning", "plugin:import/errors"]
 }

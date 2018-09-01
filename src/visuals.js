@@ -1,9 +1,18 @@
-import {
+// this makes it easier to use third party stuff
+// TODO: make this the preferred way of accessing THREE lib
+global.THREE = require('three')
+
+// loads external stuff. mostly from threejs demos.
+require('./ext')
+
+console.log(THREE)
+
+const {
   WebGLRenderer,
   Scene,
   PerspectiveCamera,
   Color
-} from 'three'
+} = THREE
 import VRControls from './lib/vr/vr-controls'
 import VREffect from './lib/vr/vr-effect'
 import Camera from './camera'
@@ -80,6 +89,13 @@ export default class Visuals {
     const scene = new Scene()
     scene.background = new Color('#000')
 
+    // light n fog
+    scene.fog = new THREE.Fog( 0x000000, 1, 1000 );
+    scene.add( new THREE.AmbientLight( 0x222222 ) );
+		const	light = new THREE.DirectionalLight( 0xffffff );
+		light.position.set( 1, 1, 1 );
+		scene.add( light );
+
     if (process.env.SANDBOX) {
       // enter sandbox mode
       this.mixer = new Mixer(1, this.midi, this.socket, scene)
@@ -108,7 +124,7 @@ export default class Visuals {
         circleRadius: 5,
         circleSegments: 64
       }))
-      this.mixer.channels[7].setSource(new Grid())
+      this.mixer.channels[7].setSource(new Flow())
 
       // this.midi.logBindings()
     }
@@ -116,6 +132,28 @@ export default class Visuals {
     this.renderer = renderer
     this.camera = camera
     this.scene = scene
+
+    console.log('rendo', this.renderer)
+
+    // postprocessing
+    const composer = new THREE.EffectComposer( this.renderer );
+		composer.addPass( new THREE.RenderPass( this.scene, this.camera ) );
+
+		let effect = new THREE.ShaderPass( THREE.DotScreenShader );
+		effect.uniforms[ 'scale' ].value = 4;
+		// composer.addPass( effect );
+
+		let effect2 = new THREE.ShaderPass( THREE.RGBShiftShader );
+		effect2.uniforms[ 'amount' ].value = 0.4;
+    // 0.0015, 0.4,
+		effect2.renderToScreen = true;
+		// composer.addPass( effect2 );
+
+    let effect3 = new THREE.ShaderPass( THREE.AfterimageShader );
+		// effect.uniforms[ 'scale' ].value = 4;
+		composer.addPass( effect3 );
+
+    this.composer = composer
 
     // let vrDisplay = null
     if (process.env.VR_CLIENT) {
@@ -137,7 +175,7 @@ export default class Visuals {
   }
 
   render (vrDisplay) {
-    const { renderer, camera, scene, mixer, controls, effect } = this
+    const { renderer, camera, scene, mixer, controls, effect, composer } = this
 
     if (process.env.VR_CLIENT && vrDisplay != null) {
       if (!vrDisplay.isPresenting && vrDisplay.requestPresent) {
@@ -159,5 +197,8 @@ export default class Visuals {
       camera.update({time})
       renderer.render(scene, camera)
     }
+
+    // effect composer. needs to happen after scene is rendered.
+    composer.render()
   }
 }

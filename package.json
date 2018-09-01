@@ -4,7 +4,7 @@
   "description": "",
   "main": "init.js",
   "scripts": {
-    "start": "electron ./src/app.js",
+    "start": "electron app.js",
     "sandbox": "cross-env SANDBOX=true npm start",
     "dev": "cross-env DEV_MODE=true npm start",
     "host": "cross-env IS_HOST=true npm start",
@@ -31,7 +31,7 @@
     "quickhull3d": "^2.0.0",
     "socket.io": "^2.0.3",
     "socket.io-client": "^2.0.3",
-    "three": "^0.85.2",
+    "three": "^0.96.0",
     "webmidi": "^2.0.0-rc.5"
   },
   "devDependencies": {
