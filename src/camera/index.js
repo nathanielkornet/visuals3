@@ -10,7 +10,7 @@ export default class Camera extends PerspectiveCamera {
     this.state = {
       cameraSpeed: {x: 0, y: 0, z: 0},
       zoom: {x: 0, y: 0, z: 0},
-      cameraType: 3,
+      cameraType: 1,
       cameraRotationSpeed: 0,
       cameraDistance: 60
     }
@@ -37,8 +37,12 @@ export default class Camera extends PerspectiveCamera {
       })
     }
 
-    this.position.set(0, 0, 10)
+    this.position.set(0, 0, 100)
     this.lookAt(origin)
+
+    // TODO: maybe delete this
+    var pointLight = new THREE.PointLight( 0xffffff, 0.8 );
+		this.add( pointLight );
   }
 
   initializeMidiBindings () {

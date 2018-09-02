@@ -88,16 +88,6 @@ export default class Mixer {
         this.state.fuckFactorSpeedApply = 0
       }
     })
-
-    // speedA
-    midi.bind('K3', val => {
-      this.state.speedA = val / 64
-    })
-
-    // speedB
-    midi.bind('K4', val => {
-      this.state.speedB = val / 64
-    })
   }
 
   addChannels (num, socket, scene) {

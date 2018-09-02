@@ -14,6 +14,8 @@ export { default as Grid } from './grid'
 
 export { default as LineGeometry } from './line-geometry'
 
+export { default as Noodle } from './noodle'
+
 export { default as RandoPolys } from './rando-polys'
 
 export { default as Sandbox } from './sandbox'

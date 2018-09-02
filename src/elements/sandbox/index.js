@@ -29,6 +29,7 @@ export default class Flow extends Group {
   }
 
   update (props) {
-    this.rotation.y += 0.001
+    this.rotation.y += 0.003
+    this.rotation.z += 0.001
   }
 }

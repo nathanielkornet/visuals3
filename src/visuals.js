@@ -5,7 +5,7 @@ global.THREE = require('three')
 // loads external stuff. mostly from threejs demos.
 require('./ext')
 
-console.log(THREE)
+console.log('THREE', THREE)
 
 const {
   WebGLRenderer,
@@ -19,6 +19,7 @@ import Camera from './camera'
 import Mixer from './mixer'
 import Effects from './effects'
 import {
+  Atom,
   TriangleLand,
   Spherez,
   LineGeometry,
@@ -28,7 +29,9 @@ import {
   Sandbox,
   HeardYouLikeCubes,
   Flow,
-  Grid
+  Grid,
+  Noodle,
+  Debris
 } from './elements'
 import bind from '@dlmanning/bind'
 const SocketIOClient = require('socket.io-client')
@@ -71,7 +74,9 @@ export default class Visuals {
     const renderer = new WebGLRenderer()
     renderer.setSize(window.innerWidth, window.innerHeight)
     // renderer.setPixelRatio(Math.floor(window.devicePixelRatio))
+    renderer.setClearColor( 0x20252f );
     document.body.appendChild(renderer.domElement)
+
 
     let camera = null
     if (process.env.VR_CLIENT) {
@@ -92,7 +97,7 @@ export default class Visuals {
 
     // light n fog
     scene.fog = new THREE.Fog( 0x000000, 1, 1000 );
-    scene.add( new THREE.AmbientLight( 0x222222 ) );
+    scene.add( new THREE.AmbientLight( 0x222222, 0.4 ) );
 		const	light = new THREE.DirectionalLight( 0xffffff );
 		light.position.set( 1, 1, 1 );
 		scene.add( light );
@@ -107,19 +112,12 @@ export default class Visuals {
       this.mixer = new Mixer(8, this.midi, this.socket, scene)
 
       // set mixer channel input sources, add source to scene
-      this.mixer.channels[0].setSource(new TriangleLand())
+      this.mixer.channels[0].setSource(new HeardYouLikeCubes())
       this.mixer.channels[1].setSource(new Spherez())
       this.mixer.channels[2].setSource(new RandoPolys())
-      this.mixer.channels[3].setSource(new GiantSphere({
-        wireframe: true
-      }))
-      this.mixer.channels[4].setSource(new GiantSphere({
-        wireframe: true,
-        shape: 'box',
-        color: 'green',
-        radius: 100
-      }))
-      this.mixer.channels[5].setSource(new LineGeometry())
+      this.mixer.channels[3].setSource(new Noodle())
+      this.mixer.channels[4].setSource(new Debris())
+      this.mixer.channels[5].setSource(new TriangleLand())
       this.mixer.channels[6].setSource(new CircleGlobe({
         numCircles: 20,
         circleRadius: 5,
@@ -135,7 +133,7 @@ export default class Visuals {
     this.scene = scene
 
     // effects
-    const effects = new Effects(this.renderer, this.scene, this.camera)
+    const effects = new Effects(this.renderer, this.scene, this.camera, this.midi)
 
     // effects.addEffect(THREE.DotScreenShader, {
     //   'scale': 1 // 4, 1
@@ -191,6 +189,6 @@ export default class Visuals {
     }
 
     // effect render needs to happen after scene is rendered.
-    effects.render()
+    effects.render(time)
   }
 }
