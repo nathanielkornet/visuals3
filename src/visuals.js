@@ -189,6 +189,6 @@ export default class Visuals {
     }
 
     // effect render needs to happen after scene is rendered.
-    // effects.render(time)
+    effects.render(time)
   }
 }

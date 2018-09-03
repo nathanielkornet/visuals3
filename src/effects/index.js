@@ -8,26 +8,22 @@ import RGBShift from './rgb-shift'
 
 export default class Effects {
   constructor (renderer, scene, camera, midi) {
-    this.state = {
-      speedA: 1,
-      speedB: 1
-    }
-
-    // setup dummy placeholder effect
-    // this essentially does nothing
-    this.dummyEffect = new RGBShift().effect
-    this.dummyEffect.uniforms.amount.value = 0
-    this.dummyEffect.id = 'dummy'
+    this.state = {}
+    this.state.params = [1, 2, 3, 4, 5, 6, 7, 8].map(() => {
+      return {
+        val: 1,
+        speed: 0,
+        apply: 0
+      }
+    })
 
     const composer = new THREE.EffectComposer(renderer)
-    composer.addPass(new THREE.RenderPass(scene, camera))
+
+    this.renderPass = new THREE.RenderPass(scene, camera)
+    composer.addPass(this.renderPass)
 
     this.composer = composer
 
-    this.addEffect.bind(this)
-    this.render.bind(this)
-
-    // TODO: bind each effect to (this)
     this.dotify = new Dotify().effect
     this.rgb = new RGBShift().effect
     this.afterImage = new AfterImage().effect
@@ -55,25 +51,8 @@ export default class Effects {
       this.mirror2
     ]
 
-    // // this works
-    // this.effects = [
-    //   this.afterImage,
-    //   this.dotify,
-    //   this.edgey,
-    //   this.kaleido,
-    //   this.rgb,
-    //   this.mirror,
-    //   this.mirror2
-    // ]
-
-    this.effects.forEach(effect => {
-      this.composer.addPass(this.dummyEffect)
-    })
-
+    this.state.effectOn = this.effects.map(() => false)
     console.log('effect composer', this.composer)
-
-    // pick last effect in chain to render to screen
-    // this.composer.passes[this.composer.passes.length - 1].renderToScreen = true
 
     if (midi != null) {
       this.initializeMidiBindings(midi)
@@ -81,39 +60,44 @@ export default class Effects {
   }
 
   initializeMidiBindings (midi) {
-    const passes = this.composer.passes
     this.effects.forEach((effect, idx) => {
       midi.bind(`2-S${idx + 1}`, val => {
         if (val === 0) {
-          this.composer.setPass(this.dummyEffect, idx + 1)
+          this.effectOff(idx)
         } else {
-          this.composer.setPass(effect, idx + 1)
-          console.log(`set ${effect.id} to ${idx + 1}`)
-          effect.renderToScreen = true
+          this.effectOn(idx)
         }
 
-        let lastActive = 0
-        passes.forEach((pass, idx) => {
-          pass.renderToScreen = false
-          if (pass.id !== 'dummy') {
-            lastActive = idx
-          }
-        })
-        passes[lastActive].renderToScreen = true
+        this.populateEffects()
       })
     })
-
-    // TODO: knobs and pads
-
-    // speedA
-    midi.bind('2-K1', val => {
-      this.state.speedA = val / 127
-    })
-
-    // speedB
-    midi.bind('2-K2', val => {
-      this.state.speedB = val / 127
-    })
+    //
+    // this.state.params.forEach((param, idx) => {
+    //   const num = idx + 1
+    //
+    //   const pad = num > 4 ? 'A' : 'B'
+    //   const numModify =
+    //
+    //   midi.bind(`2-K${num}`, val => {
+    //     this.state.spreadSpeed = val / 127
+    //   })
+    //   // dec spread
+    //   midi.bind(`2-P${pad}{num}`, val => {
+    //     if (val > 0) {
+    //       this.state.spreadSpeedApply = -1
+    //     } else {
+    //       this.state.spreadSpeedApply = 0
+    //     }
+    //   })
+    //   // inc spread
+    //   midi.bind(`2-P${pad}{num + 4}`, val => {
+    //     if (val > 0) {
+    //       this.state.spreadSpeedApply = 1
+    //     } else {
+    //       this.state.spreadSpeedApply = 0
+    //     }
+    //   })
+    // })
 
     // TODO: faders
 
@@ -123,49 +107,36 @@ export default class Effects {
     })
   }
 
-  addEffect (effect) {
-    this.composer.addPass(effect)
+  effectOn (idx) {
+    this.state.effectOn[idx] = true
+  }
+
+  effectOff (idx) {
+    this.state.effectOn[idx] = false
+  }
+
+  populateEffects () {
+    this.effects.forEach(effect => {
+      effect.renderToScreen = false
+    })
+    this.composer.passes = [this.renderPass]
+    this.state.effectOn.forEach((effectOn, idx) => {
+      if (effectOn) {
+        this.composer.passes.push(this.effects[idx])
+      }
+    })
+    // pick last effect in chain to render to screen
+    if (this.composer.passes.length > 1) {
+      this.composer.passes[this.composer.passes.length - 1].renderToScreen = true
+    }
   }
 
   render (time) {
-    // this.composer.passes[2].uniforms.resolution.value.x = this.state.speedA * 1920
-    this.rgb.uniforms.amount.value = this.state.speedB
-    this.dotify.uniforms.scale.value = this.state.speedA * 4
+    // // this.composer.passes[2].uniforms.resolution.value.x = this.state.speedA * 1920
+    // this.rgb.uniforms.amount.value = this.state.speedB
+    // this.dotify.uniforms.scale.value = this.state.speedA * 4
 
     this.composer.render()
     this.refractor.render(time)
   }
 }
-
-/*
-// old way
-export default class Effects {
-  constructor (renderer, scene, camera) {
-    const composer = new THREE.EffectComposer(renderer)
-    composer.addPass(new THREE.RenderPass(scene, camera))
-
-    this.composer = composer
-
-    this.addEffect.bind(this)
-    this.render.bind(this)
-  }
-
-  addEffect (effectType, params, renderToScreen, isShaderPass) {
-    // TODO: not everything uses ShaderPass
-    const effect = new THREE.ShaderPass(effectType)
-
-    // TODO: this may not always be the best way to init parms
-    Object.keys(params).forEach(param => {
-      effect.uniforms[param].value = params[param]
-    })
-
-    effect.renderToScreen = renderToScreen
-
-    this.composer.addPass(effect)
-  }
-
-  render () {
-    this.composer.render()
-  }
-}
-*/
