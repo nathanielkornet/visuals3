@@ -73,6 +73,18 @@ Object.assign( THREE.EffectComposer.prototype, {
 
 	},
 
+  setPass: function (pass, index) {
+    this.passes[index] = pass
+  },
+
+  removePass: function (passId) {
+    // NOTE: method added by me (nsk)
+    const index = this.passes.findIndex(pass => {
+      pass.id = passId
+    })
+    this.passes.splice(index, 1)
+  },
+
 	render: function ( delta ) {
 
 		var maskActive = false;

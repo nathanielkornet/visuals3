@@ -97,26 +97,29 @@ module.exports = class MidiInterface {
       }
     }
 
-    // keyboard note on
-    if (status === 144) {
-      console.log(`note ${note} on, velocity: ${val}`)
-    }
-
-    // keyboard note off
-    if (status === 128) {
-      console.log(`note ${note} off`)
-    }
+    // // keyboard note on
+    // if (status === 144) {
+    //   console.log(`note ${note} on, velocity: ${val}`)
+    // }
+    //
+    // // keyboard note off
+    // if (status === 128) {
+    //   console.log(`note ${note} off`)
+    // }
 
     // pad hit
-    if (status === 145 || status === 129) {
+    if ([128, 129, 144, 145].includes(status)) {
+      const channel = [128, 144].includes(status)
+        ? 1
+        : 2
       // TODO: deal with channel for pads?
       const bank = note < 9 ? 'A' : 'B'
       const pad = note < 9 ? note : (note - 8)
       const action = status === 145 ? 'on' : 'off'
 
-      console.log(`pad ${bank}${pad} ${action}, velocity: ${val}`)
+      console.log(`CH${channel} pad ${bank}${pad} ${action}, velocity: ${val}`)
 
-      bindingAction = this.bindings['P'][bank][pad]
+      bindingAction = this.bindings[channel]['P'][bank][pad]
     }
 
     // fire action
@@ -133,7 +136,7 @@ module.exports = class MidiInterface {
   */
   bind (controlString, onChange) {
     const split = controlString.split('-')
-    console.log(split)
+
     const channel = split[0]
     const control = split[1]
     const controlType = control.charAt(0)
