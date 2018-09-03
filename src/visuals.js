@@ -112,7 +112,7 @@ export default class Visuals {
       this.mixer = new Mixer(8, this.midi, this.socket, scene)
 
       // set mixer channel input sources, add source to scene
-      this.mixer.channels[0].setSource(new HeardYouLikeCubes())
+      // this.mixer.channels[0].setSource(new HeardYouLikeCubes())
       this.mixer.channels[1].setSource(new Spherez())
       this.mixer.channels[2].setSource(new RandoPolys())
       this.mixer.channels[3].setSource(new Noodle())
@@ -124,8 +124,6 @@ export default class Visuals {
         circleSegments: 64
       }))
       this.mixer.channels[7].setSource(new Flow())
-
-      // this.midi.logBindings()
     }
 
     this.renderer = renderer
@@ -162,6 +160,8 @@ export default class Visuals {
     } else {
       this.render()
     }
+
+    this.midi.logBindings()
   }
 
   render (vrDisplay) {

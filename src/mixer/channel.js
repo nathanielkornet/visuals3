@@ -48,8 +48,8 @@ export default class Channel {
   initializeMidiBindings (midi, socket, scene) {
     const { channelNum } = this
 
-    const faderId = `F${channelNum}`
-    const switchId = `S${channelNum}`
+    const faderId = `1-F${channelNum}`
+    const switchId = `1-S${channelNum}`
 
     midi.bind(faderId, val => {
       const newOpacity = (val / 127)

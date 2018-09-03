@@ -1,4 +1,4 @@
 require('./EffectComposer')
-require('./RenderPass')
 require('./MaskPass')
+require('./RenderPass')
 require('./ShaderPass')

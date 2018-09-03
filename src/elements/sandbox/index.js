@@ -4,7 +4,7 @@ import {
 import bind from '@dlmanning/bind'
 import { getRandomHexColor } from '../../lib/helpers'
 
-export default class Flow extends Group {
+export default class Debris extends Group {
   constructor (props = {}) {
     super()
 
@@ -16,7 +16,7 @@ export default class Flow extends Group {
 
   initialize (props) {
 			var geometry = new THREE.SphereBufferGeometry( 1, 4, 4 );
-			var material = new THREE.MeshPhongMaterial( { color: 0xffffff, flatShading: true } );
+			var material = new THREE.MeshNormalMaterial( { color: 0xffffff, flatShading: true } );
 			for ( var i = 0; i < 100; i ++ ) {
 				var mesh = new THREE.Mesh( geometry, material );
 				mesh.position.set( Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5 ).normalize();
@@ -29,7 +29,6 @@ export default class Flow extends Group {
   }
 
   update (props) {
-    this.rotation.y += 0.003
-    this.rotation.z += 0.001
+    this.rotation.y += 0.001
   }
 }
