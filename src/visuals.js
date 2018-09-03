@@ -161,7 +161,7 @@ export default class Visuals {
       this.render()
     }
 
-    // this.midi.logBindings()
+    this.midi.logBindings()
   }
 
   render (vrDisplay) {

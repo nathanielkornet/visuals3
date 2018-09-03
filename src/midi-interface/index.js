@@ -161,6 +161,6 @@ module.exports = class MidiInterface {
   }
 
   logBindings () {
-    console.log(this.bindings)
+    console.log('MIDI bindings:', this.bindings)
   }
 }
