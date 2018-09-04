@@ -3,8 +3,10 @@ export default class Refractor {
   constructor (scene) {
     this.render.bind(this)
 
+    const refractorGeometry = new THREE.BoxBufferGeometry(15, 15, 15) // 15, 15
     // const refractorGeometry = new THREE.PlaneBufferGeometry(15, 15)
-    const refractorGeometry = new THREE.SphereBufferGeometry(15, 15) // 15, 15
+
+    console.log('ref', THREE.Refractor)
 
     const refractor = new THREE.Refractor(refractorGeometry, {
       color: 0x999999,
@@ -12,6 +14,9 @@ export default class Refractor {
       textureHeight: 1024, // fun to mess with, init 1024
       shader: THREE.WaterRefractionShader
     })
+
+    // allows effect to render on inside of sphere
+    refractor.material.side = THREE.DoubleSide
 
     refractor.position.set(0, 0, 80) // 0, 0, 80 w sphere is dope
     scene.add(refractor)
@@ -25,14 +30,26 @@ export default class Refractor {
 
     this.refractor = refractor
 
-    this.clock = new THREE.Clock();
+    this.clock = new THREE.Clock()
 
     console.log(this.refractor)
   }
 
-  render (time) {
-    this.refractor.material.uniforms.time.value += this.clock.getDelta();
+  render (camera) {
+    this.refractor.material.uniforms.time.value += this.clock.getDelta()
 
-    // TODO: find a way to position it perfectly in front of or around the camera
+    // set to camera position
+
+
+    var zCamVec = new THREE.Vector3(0,0,-15);
+    var position = camera.localToWorld(zCamVec);
+
+    const { x, y, z } = position
+    this.refractor.position.setX(x)
+    this.refractor.position.setY(y)
+    this.refractor.position.setZ(z)
+    //
+    this.refractor.lookAt(camera.position);
+
   }
 }

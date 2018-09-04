@@ -43,6 +43,8 @@ export default class Camera extends PerspectiveCamera {
     // TODO: maybe delete this
     var pointLight = new THREE.PointLight( 0xffffff, 0.8 );
 		this.add( pointLight );
+
+    console.log(this)
   }
 
   initializeMidiBindings () {

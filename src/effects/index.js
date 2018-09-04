@@ -18,6 +18,9 @@ export default class Effects {
       }
     })
 
+    // to be passed to refreactor later
+    this.camera = camera
+
     const composer = new THREE.EffectComposer(renderer)
 
     this.renderPass = new THREE.RenderPass(scene, camera)
@@ -141,6 +144,6 @@ export default class Effects {
 
     // render
     this.composer.render()
-    this.refractor.render(time)
+    this.refractor.render(this.camera)
   }
 }
