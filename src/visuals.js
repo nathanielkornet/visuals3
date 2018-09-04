@@ -77,7 +77,6 @@ export default class Visuals {
     renderer.setClearColor( 0x20252f );
     document.body.appendChild(renderer.domElement)
 
-
     let camera = null
     if (process.env.VR_CLIENT) {
       require('./lib/vr/webvr-polyfill.js')
@@ -126,24 +125,15 @@ export default class Visuals {
       this.mixer.channels[7].setSource(new Flow())
     }
 
+    // init effects
+    const effects = new Effects(renderer, scene, camera, midi)
+
+    // store to (this) context for later access
     this.renderer = renderer
     this.camera = camera
     this.scene = scene
-
-    // effects
-    const effects = new Effects(this.renderer, this.scene, this.camera, this.midi)
-
-    // effects.addEffect(THREE.DotScreenShader, {
-    //   'scale': 1 // 4, 1
-    // })
-    //
-    // effects.addEffect(THREE.RGBShiftShader, {
-    //   'amount': 0.015 // 0.0015, 0.4,
-    // }, true)
-
     this.effects = effects
 
-    // let vrDisplay = null
     if (process.env.VR_CLIENT) {
       // Initialize VR environment
       if (navigator.getVRDisplays) {
@@ -161,7 +151,7 @@ export default class Visuals {
       this.render()
     }
 
-    this.midi.logBindings()
+    // this.midi.logBindings()
   }
 
   render (vrDisplay) {
@@ -188,7 +178,7 @@ export default class Visuals {
       renderer.render(scene, camera)
     }
 
-    // effect render needs to happen after scene is rendered.
+    // effect rendering needs to happen after scene is rendered.
     effects.render(time)
   }
 }

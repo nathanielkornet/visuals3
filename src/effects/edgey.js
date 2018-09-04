@@ -1,5 +1,8 @@
-export default class Edgey {
+import Effect from './effect'
+
+export default class Edgey extends Effect {
   constructor () {
+    super()
     const effect = new THREE.ShaderPass(THREE.SobelOperatorShader)
 
     // effect.renderToScreen = true
@@ -9,5 +12,9 @@ export default class Edgey {
     effect.uniforms.resolution.value.y = 1080
 
     this.effect = effect
+  }
+
+  update (params) {
+
   }
 }

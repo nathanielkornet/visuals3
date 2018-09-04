@@ -28,23 +28,23 @@ export default class Effects {
 
     this.composer = composer
 
-    this.dotify = new Dotify().effect
-    this.rgb = new RGBShift().effect
-    this.afterImage = new AfterImage().effect
-    this.edgey = new Edgey().effect
-    this.kaleido = new Kaleido().effect
-    this.mirror = new Mirror(1).effect
-    this.mirror2 = new Mirror(2).effect
-    this.refractor = new Refractor(scene)
+    this.dotify = new Dotify()
+    this.rgb = new RGBShift()
+    this.afterImage = new AfterImage()
+    this.edgey = new Edgey()
+    this.kaleido = new Kaleido()
+    this.mirror = new Mirror(1)
+    this.mirror2 = new Mirror(2)
+    this.refractor = new Refractor(scene, midi)
 
     this.effects = [
+      this.mirror,
+      this.mirror2,
+      this.kaleido,
       this.afterImage,
       this.dotify,
       this.edgey,
-      this.kaleido,
-      this.rgb,
-      this.mirror,
-      this.mirror2
+      this.rgb
     ]
 
     this.state.effectOn = this.effects.map(() => false)
@@ -71,7 +71,11 @@ export default class Effects {
 
     // set knob and pad controls
     this.state.params.forEach((param, idx) => {
-      const num = idx + 1
+      if (idx === 0) {
+        // 0th param is just a placeholder.
+        return
+      }
+      const num = idx
 
       // params 5-8 will translate to 9-12
       const padBank = num > 4 ? 'A' : 'B'
@@ -111,7 +115,7 @@ export default class Effects {
 
   populateComposer () {
     this.effects.forEach(effect => {
-      effect.renderToScreen = false
+      effect.setRenderToScreen(false)
     })
 
     // re-initialize composer
@@ -120,7 +124,7 @@ export default class Effects {
     this.state.effectOn.forEach((effectOn, idx) => {
       // add enabled effects to the composer
       if (effectOn) {
-        this.composer.passes.push(this.effects[idx])
+        this.composer.passes.push(this.effects[idx].effect)
       }
     })
 
@@ -131,16 +135,17 @@ export default class Effects {
   }
 
   render (time) {
+    const { params } = this.state
     // update params
-    this.state.params.forEach(param => {
+    params.forEach(param => {
       if (param.apply !== 0) {
         param.val += param.speed * param.apply
       }
     })
 
     // apply params to effects (maybe move to each file)
-    this.rgb.uniforms.amount.value = this.state.params[0].val / 100
-    this.dotify.uniforms.scale.value = this.state.params[1].val / 1000
+    this.effects.forEach(effect => effect.update(params))
+    this.refractor.update(params)
 
     // render
     this.composer.render()

@@ -58,7 +58,7 @@ module.exports = class MidiInterface {
   }
 
   parseMessage (message) {
-    console.log(message)
+    // console.log('midi', message)
 
     const status = message[0]
     const note = message[1] // TODO: temp hack to "let" channel append to end of note

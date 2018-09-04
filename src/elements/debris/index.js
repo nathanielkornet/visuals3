@@ -16,7 +16,8 @@ export default class Debris extends Group {
 
   initialize (props) {
 			var geometry = new THREE.SphereBufferGeometry( 1, 4, 4 );
-			var material = new THREE.MeshPhongMaterial( { color: 0xffffff, flatShading: true } );
+			var material = new THREE.MeshNormalMaterial( { color: 0xffffff, flatShading: true } );
+      // MeshPhong
 			for ( var i = 0; i < 100; i ++ ) {
 				var mesh = new THREE.Mesh( geometry, material );
 				mesh.position.set( Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5 ).normalize();
