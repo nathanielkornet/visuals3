@@ -7,13 +7,6 @@ export default class Atom extends Group {
   constructor () {
     super()
 
-    this.state = {
-      time: 0,
-      spread: 0,
-      cameraSpeed: {x: 0, y: 0, z: 0},
-      zoomZ: 0
-    }
-
     // this.initializeMidiBindings = bind(this, this.initializeMidiBindings)
     this.initialize = bind(this, this.initialize)
     this.update = bind(this, this.update)
@@ -63,13 +56,9 @@ export default class Atom extends Group {
     dlight3.position.x = -1
     dlight3.position.y = -1
     this.add(dlight3)
-
-    this.update()
   }
 
   update (props) {
-    window.requestAnimationFrame(this.update)
-
     const {
       time
     } = props

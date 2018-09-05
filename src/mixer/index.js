@@ -48,11 +48,11 @@ export default class Mixer {
     const { midi } = this
 
     // controls spread speed change of the spheres
-    midi.bind('K1', val => {
+    midi.bind('1-K1', val => {
       this.state.spreadSpeed = val / 127
     })
     // dec spread
-    midi.bind('PB1', val => {
+    midi.bind('1-PB1', val => {
       if (val > 0) {
         this.state.spreadSpeedApply = -1
       } else {
@@ -60,7 +60,7 @@ export default class Mixer {
       }
     })
     // inc spread
-    midi.bind('PB5', val => {
+    midi.bind('1-PB5', val => {
       if (val > 0) {
         this.state.spreadSpeedApply = 1
       } else {
@@ -69,11 +69,11 @@ export default class Mixer {
     })
 
     // controls the "fuck factor" of the spheres
-    midi.bind('K2', val => {
+    midi.bind('1-K2', val => {
       this.state.fuckFactorSpeed = (val / 127 / 100)
     })
     // dec fuckFactor
-    midi.bind('PB2', val => {
+    midi.bind('1-PB2', val => {
       if (val > 0) {
         this.state.fuckFactorSpeedApply = -1
       } else {
@@ -81,22 +81,12 @@ export default class Mixer {
       }
     })
     // inc fuckFactor
-    midi.bind('PB6', val => {
+    midi.bind('1-PB6', val => {
       if (val > 0) {
         this.state.fuckFactorSpeedApply = 1
       } else {
         this.state.fuckFactorSpeedApply = 0
       }
-    })
-
-    // speedA
-    midi.bind('K3', val => {
-      this.state.speedA = val / 64
-    })
-
-    // speedB
-    midi.bind('K4', val => {
-      this.state.speedB = val / 64
     })
   }
 

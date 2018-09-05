@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <style>
+      html,body{
+        margin:0;
+        padding:0;
+        overflow: hidden;
+      }
+    </style>
+    <script>
+      import Visuals from './src/visuals'
+
+      window.onload = function () {
+        const visuals = new Visuals()
+      }
+    </script>
+    <script src="ext/AfterimagePass.js"></script>
+    <script src="ext/LuminosityShader.js"></script>
+    <script src="ext/SobelOperatorShader.js"></script>
+    <script src="ext/WaterRefractionShader.js"></script>
+    <script src="ext/KaleidoShader.js"></script>
+    <script src="ext/MirrorShader.js"></script>
+    <script src="ext/objects/Refractor.js"></script>
+  </head>
+  <body />
+</html>
