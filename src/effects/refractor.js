@@ -27,11 +27,16 @@ export default class Refractor {
     dudvMap.wrapS = dudvMap.wrapT = THREE.RepeatWrapping
     refractor.material.uniforms.tDudv.value = dudvMap
 
+    refractor.scale.x = 0.0001
+    refractor.scale.y = 0.0001
+    refractor.scale.z = 0.0001
+
     this.refractor = refractor
 
     this.clock = new THREE.Clock()
 
-    // console.log(this.refractor)
+    console.log(this.refractor)
+    console.log(this.refractor.material.uniforms)
 
     this.initializeMidiBindings(midi, scene)
   }
@@ -47,7 +52,13 @@ export default class Refractor {
   }
 
   update (params) {
+    const scale = (params[8].val / 500)
 
+    if (scale < 1.791968503937008 && scale > 0) {
+      this.refractor.scale.x = scale
+      this.refractor.scale.y = scale
+      this.refractor.scale.z = scale
+    }
   }
 
   render (camera) {

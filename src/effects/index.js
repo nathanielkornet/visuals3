@@ -49,8 +49,6 @@ export default class Effects {
 
     this.state.effectOn = this.effects.map(() => false)
 
-    console.log('effect composer', this.composer)
-
     if (midi != null) {
       this.initializeMidiBindings(midi)
     }
@@ -102,6 +100,7 @@ export default class Effects {
     midi.bind('2-B1', val => {
       console.log('composer', this.composer.passes)
       console.log('params', this.state.params)
+      console.log('ref', this.refractor)
     })
   }
 

@@ -12,19 +12,16 @@ export default class AfterImage extends Effect {
     super()
     const effect = new THREE.AfterimagePass()
 
-    // effect.renderToScreen = true
     effect.enabled = true
 
     this.effect = effect
-
-    console.log(this.effect.uniforms)
   }
 
   update (params) {
     // const x = (Math.tanh(params[4].fader) / 10) + 0.9238405844
 
     // lol this function. Values between 0.9 and 1.0 work best for this field.
-    // The effect is more "extreme" at the upper end of this spectrum. Played
+    // The effect is more "extreme" per step at the upper end of this spectrum. Played
     // around with some math until I found a function that would map well to the fader
     // such that it incremented the value quickly at the bottom and slowly at the top.
     // This produced the "smoothest" application of the effect.
