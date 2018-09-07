@@ -6,6 +6,13 @@ import Mirror from './mirror'
 import Refractor from './refractor'
 import RGBShift from './rgb-shift'
 
+const initialState = {
+  val: 1,
+  speed: 0,
+  apply: 0,
+  fader: 0
+}
+
 export default class Effects {
   constructor (renderer, scene, camera, midi) {
     this.state = {}
@@ -101,6 +108,15 @@ export default class Effects {
       console.log('composer', this.composer.passes)
       console.log('params', this.state.params)
       console.log('ref', this.refractor)
+    })
+
+    // reset state
+    midi.bind('2-B5', () => {
+      this.state.params.forEach(param => {
+        Object.keys(initialState).forEach(stateVar => {
+          param[stateVar] = initialState[stateVar]
+        })
+      })
     })
   }
 

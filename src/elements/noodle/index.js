@@ -19,9 +19,15 @@ export default class Flow extends Group {
     var material = new THREE.MeshStandardMaterial( { color: 0x6083c2 } );
     var mesh = new THREE.Mesh( geometry, material );
     this.add(mesh)
+
+    this.noodle = mesh
   }
 
   update (props) {
     this.rotation.y += 0.001
+
+    this.noodle.material.opacity = props.opacity
+    this.noodle.material.transparent = true
+
   }
 }

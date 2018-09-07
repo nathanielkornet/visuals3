@@ -29,9 +29,9 @@ export default class HeardYouLikeCubes extends Group {
 
     this.boxes = []
 
-    this.addBoxes(3000, wireframe, Geometry, radius)
+    this.addBoxes(1700, wireframe, Geometry, radius)
     this.addBoxes(300, wireframe, Geometry, radius / 2)
-    this.addBoxes(5000, wireframe, Geometry, radius * 3)
+    this.addBoxes(1900, wireframe, Geometry, radius * 3)
 
     // 700 300 900
   }

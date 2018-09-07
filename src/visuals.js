@@ -31,7 +31,9 @@ import {
   Flow,
   Grid,
   Noodle,
-  Debris
+  Debris,
+  Particles,
+  Periphery
 } from './elements'
 import bind from '@dlmanning/bind'
 const SocketIOClient = require('socket.io-client')
@@ -108,21 +110,47 @@ export default class Visuals {
       sandbox.setSource(new Sandbox())
       sandbox.setOpacity(0.85)
     } else {
-      this.mixer = new Mixer(8, this.midi, this.socket, scene)
+      this.mixer = new Mixer(16, this.midi, this.socket, scene)
+
+      /*
+      TriangleLand,
+      Spherez,
+      LineGeometry,
+      RandoPolys,
+      GiantSphere,
+      CircleGlobe,
+      HeardYouLikeCubes,
+      Flow,
+      Grid,
+      Noodle,
+      Debris,
+      Particles,
+      Periphery
+      */
 
       // set mixer channel input sources, add source to scene
-      // this.mixer.channels[0].setSource(new HeardYouLikeCubes())
+      // A controls
+      this.mixer.channels[0].setSource(new HeardYouLikeCubes())
       this.mixer.channels[1].setSource(new Spherez())
       this.mixer.channels[2].setSource(new RandoPolys())
       this.mixer.channels[3].setSource(new Noodle())
       this.mixer.channels[4].setSource(new Debris())
       this.mixer.channels[5].setSource(new TriangleLand())
-      this.mixer.channels[6].setSource(new CircleGlobe({
+      this.mixer.channels[6].setSource(new Periphery())
+      this.mixer.channels[7].setSource(new Flow())
+      this.mixer.channels[8].setSource(new CircleGlobe({
         numCircles: 20,
         circleRadius: 5,
         circleSegments: 64
       }))
-      this.mixer.channels[7].setSource(new Flow())
+      // B controls
+      this.mixer.channels[9].setSource(new LineGeometry())
+      this.mixer.channels[10].setSource(new Flow())
+      this.mixer.channels[11].setSource(new Grid())
+      this.mixer.channels[12].setSource(new Particles())
+      // this.mixer.channels[13].setSource(new Flow())
+      // this.mixer.channels[14].setSource(new Flow())
+      // this.mixer.channels[15].setSource(new Flow())
     }
 
     // init effects

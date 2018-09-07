@@ -35,8 +35,8 @@ export default class Refractor {
 
     this.clock = new THREE.Clock()
 
-    console.log(this.refractor)
-    console.log(this.refractor.material.uniforms)
+    // console.log(this.refractor)
+    // console.log(this.refractor.material.uniforms)
 
     this.initializeMidiBindings(midi, scene)
   }

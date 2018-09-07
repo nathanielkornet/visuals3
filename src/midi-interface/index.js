@@ -19,6 +19,16 @@ const emptyBindings = {
       A: {},
       B: {}
     }
+  },
+  3: {
+    K: {}, // knobs
+    F: {}, // faders
+    S: {}, // sliders
+    B: {}, // buttons
+    P: { // pads
+      A: {},
+      B: {}
+    }
   }
 }
 
@@ -67,10 +77,10 @@ module.exports = class MidiInterface {
     let bindingAction = () => null
 
     // CC
-    if (status === 176 || status === 177) {
+    if (status === 176 || status === 177 || status === 178) {
       const pct = Math.round((val / 127) * 100)
 
-      const channel = status === 176 ? 1 : 2
+      const channel = status - 175
 
       if (note < 10) {
         // knob

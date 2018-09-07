@@ -26,18 +26,27 @@ export default class Sandbox extends Group {
     helper.position.y = -50
 		helper.material.transparent = true;
 
+    this.grid = helper
+
     this.add(helper)
 
     var pointLight = new PointLight( 0xff0000, 1, 100 );
     pointLight.position.set( 10, 10, 10 );
-    this.add( pointLight );
+    // this.add( pointLight );
 
     var sphereSize = 1;
     var pointLightHelper = new PointLightHelper( pointLight, sphereSize );
-    this.add( pointLightHelper );
+    // this.add( pointLightHelper );
   }
 
   update (props) {
+    this.grid.material.opacity = props.opacity
+    this.grid.material.transparent = true
 
+    if (Math.round(this.position.z) === 10) {
+      this.position.z = 0
+    } else {
+      this.position.z += 0.1
+    }
   }
 }

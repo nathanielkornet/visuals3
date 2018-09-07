@@ -43,8 +43,6 @@ export default class Camera extends PerspectiveCamera {
     // TODO: maybe delete this
     var pointLight = new THREE.PointLight( 0xffffff, 0.8 );
 		this.add( pointLight );
-
-    console.log(this)
   }
 
   initializeMidiBindings () {
@@ -61,6 +59,9 @@ export default class Camera extends PerspectiveCamera {
     })
     midi.bind('1-B3', () => {
       this.state.cameraType = 3
+    })
+    midi.bind('1-B4', () => {
+      this.state.cameraType = 4
     })
 
     // roation speed (in camera 2 view)
@@ -132,13 +133,13 @@ export default class Camera extends PerspectiveCamera {
         newRotation = 0.0005 * cameraRotationSpeed
         this.rotation.y += newRotation
       }
-    } else if (cameraType === 3) {
+    } else if (cameraType === 3 || cameraType === 4) {
       const { time } = props
 
       newCameraPosition = {
-        x: cameraDistance * Math.sin(time / 1010),
-        y: cameraDistance * Math.sin(time / 505),
-        z: cameraDistance * Math.cos(time / 8030)
+        x: cameraDistance * Math.sin(time / 1010) + (cameraType === 4 ? 40 : 0),
+        y: cameraDistance * Math.sin(time / 505) + (cameraType === 4 ? 40 : 0),
+        z: cameraDistance * Math.cos(time / 8030) + (cameraType === 4 ? 40 : 0)
       }
 
       this.lookAt(origin)
