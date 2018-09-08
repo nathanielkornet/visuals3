@@ -13,8 +13,7 @@ export default class Debris extends Group {
 
     this.initialize(props)
 
-    this.specialActive = false
-    this.allNormal = true
+    this.crystal = false
   }
 
   initialize (props) {
@@ -50,11 +49,17 @@ export default class Debris extends Group {
       this.debris.push(mesh)
     }
 
-    for (let i = 0; i < 4000; i++) {
+    for (let i = 0; i < 2000; i++) {
       const mesh = new THREE.Mesh(geometry, material)
 
       mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2)
       mesh.scale.x = mesh.scale.y = mesh.scale.z = Math.random() * 0.5
+
+      mesh.myScale = {
+        x: Number(mesh.scale.x),
+        y: Number(mesh.scale.y),
+        z: Number(mesh.scale.z)
+      }
 
       mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize()
       mesh.position.multiplyScalar(Math.random() * 70)
@@ -86,6 +91,10 @@ export default class Debris extends Group {
       d
     } = props
 
+    if (props.specialEffect && !this.crystal) {
+      this.crystal = true
+    }
+
     this.rotation.y += 0.0001
 
     const globalGrowSpeed = c - 1
@@ -95,7 +104,7 @@ export default class Debris extends Group {
       thing.material.opacity = opacity
       thing.material.transparent = true
 
-      if (props.specialEffect) {
+      if (this.crystal) {
         thing.scale.x += Math.sin(props.time / (400 * idx) + idx) / 40 * thing.growSpeed.x * globalGrowSpeed
         thing.scale.y += Math.sin(props.time / (400 * idx) + idx) / 40 * thing.growSpeed.y * globalGrowSpeed
         thing.scale.z += Math.sin(props.time / (400 * idx) + idx) / 40 * thing.growSpeed.z * globalGrowSpeed
@@ -103,6 +112,16 @@ export default class Debris extends Group {
         thing.rotation.x += thing.myRotation.x * rotApply
         thing.rotation.y += thing.myRotation.y * rotApply
         thing.rotation.z += thing.myRotation.z * rotApply
+      } else if (!props.specialEffect && this.crystal) {
+        // special effect turned off, reset to original scale
+        thing.scale.x = thing.myScale.x
+        thing.scale.y = thing.myScale.y
+        thing.scale.z = thing.myScale.z
+
+        if (idx === this.debris.length - 1) {
+          // turn cystal mode off once we hit the last one
+          this.crystal = false
+        }
       }
     })
 

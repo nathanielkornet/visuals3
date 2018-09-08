@@ -33,13 +33,15 @@ export default class Effects {
     this.renderPass = new THREE.RenderPass(scene, camera)
     composer.addPass(this.renderPass)
 
+    this.renderPass.renderToScreen = true
+
     this.composer = composer
 
     this.dotify = new Dotify()
     this.rgb = new RGBShift()
     this.afterImage = new AfterImage()
     this.edgey = new Edgey()
-    this.kaleido = new Kaleido()
+    this.kaleido = new Kaleido(midi)
     this.mirror = new Mirror(1)
     this.mirror2 = new Mirror(2)
     this.refractor = new Refractor(scene, midi)
@@ -103,12 +105,12 @@ export default class Effects {
       })
     })
 
-    // TODO: buttons
-    midi.bind('2-B1', val => {
-      console.log('composer', this.composer.passes)
-      console.log('params', this.state.params)
-      console.log('ref', this.refractor)
-    })
+    // // TODO: buttons
+    // midi.bind('2-B1', val => {
+    //   console.log('composer', this.composer.passes)
+    //   console.log('params', this.state.params)
+    //   console.log('ref', this.refractor)
+    // })
 
     // reset state
     midi.bind('2-B5', () => {
@@ -130,6 +132,7 @@ export default class Effects {
 
   populateComposer () {
     this.effects.forEach(effect => {
+      this.renderPass.renderToScreen = false
       effect.setRenderToScreen(false)
     })
 
@@ -144,7 +147,7 @@ export default class Effects {
     })
 
     // set last effect in chain to render to screen
-    if (this.composer.passes.length > 1) {
+    if (this.composer.passes.length > 0) {
       this.composer.passes[this.composer.passes.length - 1].renderToScreen = true
     }
   }

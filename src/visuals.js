@@ -134,7 +134,7 @@ export default class Visuals {
       this.mixer.channels[1].setSource(new Spherez())
       this.mixer.channels[2].setSource(new RandoPolys())
       this.mixer.channels[3].setSource(new Noodle())
-      this.mixer.channels[4].setSource(new Debris())
+      this.mixer.channels[4].setSource(new Debris()) // crystalz
       this.mixer.channels[5].setSource(new TriangleLand())
       this.mixer.channels[6].setSource(new Periphery())
       this.mixer.channels[7].setSource(new Flow())
@@ -145,12 +145,19 @@ export default class Visuals {
       }))
       // B controls
       this.mixer.channels[9].setSource(new LineGeometry())
-      this.mixer.channels[10].setSource(new Flow())
+      this.mixer.channels[10].setSource(new GiantSphere({
+        wireframe: true
+      }))
       this.mixer.channels[11].setSource(new Grid())
       this.mixer.channels[12].setSource(new Particles())
-      // this.mixer.channels[13].setSource(new Flow())
-      // this.mixer.channels[14].setSource(new Flow())
-      // this.mixer.channels[15].setSource(new Flow())
+      this.mixer.channels[13].setSource(new Atom())
+      this.mixer.channels[14].setSource(new Flow({
+        color: true
+      }))
+      this.mixer.channels[15].setSource(new GiantSphere({
+        color: 'white',
+        radius: 200
+      }))
     }
 
     // init effects
@@ -203,7 +210,7 @@ export default class Visuals {
     } else {
       // update camera
       camera.update({time})
-      renderer.render(scene, camera)
+      // renderer.render(scene, camera)
     }
 
     // effect rendering needs to happen after scene is rendered.

@@ -1,7 +1,7 @@
 import Effect from './effect'
 
 export default class Kaleido extends Effect {
-  constructor () {
+  constructor (midi) {
     super()
     const effect = new THREE.ShaderPass(THREE.KaleidoShader)
 
@@ -14,6 +14,22 @@ export default class Kaleido extends Effect {
     this.effect = effect
 
     // console.log(this.effect.uniforms)
+
+    midi.bind('2-B1', () => {
+      this.effect.uniforms.sides.value = 3
+    })
+    midi.bind('2-B2', () => {
+      this.effect.uniforms.sides.value = 6
+    })
+    midi.bind('2-B3', () => {
+      this.effect.uniforms.sides.value = 16
+    })
+    midi.bind('2-B4', () => {
+      this.effect.uniforms.sides.value = 1000
+    })
+
+
+
   }
 
   update (params) {

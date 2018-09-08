@@ -153,7 +153,7 @@ export default class Mixer {
     // reset state
     midi.bind('1-B5', () => {
       Object.keys(initialState).forEach(stateVar => {
-        this.state[stateVar] = initialState[stateVar]
+        this.state[stateVar] = Number(initialState[stateVar])
       })
     })
   }

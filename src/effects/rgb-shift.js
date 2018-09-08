@@ -11,7 +11,7 @@ export default class RGBShift extends Effect {
   }
 
   update (params) {
-    this.effect.uniforms.amount.value = params[3].val / 100
+    this.effect.uniforms.amount.value = -0.01 + params[3].val / 100
     this.effect.uniforms.angle.value = params[4].val / 50
   }
 }

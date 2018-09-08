@@ -13,8 +13,7 @@ export default class Debris extends Group {
 
     this.initialize(props)
 
-    this.specialActive = false
-    this.allNormal = true
+    this.crystal = false
   }
 
   initialize (props) {
@@ -50,11 +49,17 @@ export default class Debris extends Group {
       this.debris.push(mesh)
     }
 
-    for (let i = 0; i < 4000; i++) {
+    for (let i = 0; i < 2000; i++) {
       const mesh = new THREE.Mesh(geometry, material)
 
       mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2)
       mesh.scale.x = mesh.scale.y = mesh.scale.z = Math.random() * 0.5
+
+      mesh.myScale = {
+        x: Number(mesh.scale.x),
+        y: Number(mesh.scale.y),
+        z: Number(mesh.scale.z)
+      }
 
       mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize()
       mesh.position.multiplyScalar(Math.random() * 70)
@@ -68,7 +73,7 @@ export default class Debris extends Group {
       this.small.push(mesh)
       this.smallGroup.add(mesh)
 
-      this.smallGroup.rotation.z -= 0.01
+      // this.smallGroup.rotation.z -= 0.01
 
       mesh.origY = Number(mesh.position.y)
     }
@@ -86,16 +91,22 @@ export default class Debris extends Group {
       d
     } = props
 
-    this.rotation.y += 0.0001
+    console.log(props)
+
+    if (props.specialEffect && !this.crystal) {
+      this.crystal = true
+    }
+
+    this.rotation.y += 0.0002
 
     const globalGrowSpeed = c - 1
     const rotApply = d * 10
 
     this.debris.forEach((thing, idx) => {
-      thing.material.opacity = props.opacity
+      thing.material.opacity = opacity
       thing.material.transparent = true
 
-      if (true){//props.specialEffect) {
+      if (this.crystal) {
         thing.scale.x += Math.sin(props.time / (400 * idx) + idx) / 40 * thing.growSpeed.x * globalGrowSpeed
         thing.scale.y += Math.sin(props.time / (400 * idx) + idx) / 40 * thing.growSpeed.y * globalGrowSpeed
         thing.scale.z += Math.sin(props.time / (400 * idx) + idx) / 40 * thing.growSpeed.z * globalGrowSpeed
@@ -103,14 +114,26 @@ export default class Debris extends Group {
         thing.rotation.x += thing.myRotation.x * rotApply
         thing.rotation.y += thing.myRotation.y * rotApply
         thing.rotation.z += thing.myRotation.z * rotApply
+      } else if (!props.specialEffect && this.crystal) {
+        // special effect turned off, reset to original scale
+        thing.scale.x = thing.myScale.x
+        thing.scale.y = thing.myScale.y
+        thing.scale.z = thing.myScale.z
+
+        if (idx === this.debris.length - 1) {
+          // turn cystal mode off once we hit the last one
+          this.crystal = false
+        }
       }
     })
 
-    if (props.specialEffect) {
-      this.smallGroup.rotation.z += 0.0005
-    }
+    this.smallGroup.rotation.y += 0.0003
+    this.smallGroup.rotation.z += 0.0003
 
     this.small.forEach((smallThing, idx) => {
+      smallThing.material.opacity = opacity
+      smallThing.material.transparent = true
+
       smallThing.rotation.x += smallThing.myRotation.x
       smallThing.rotation.y += smallThing.myRotation.y
       smallThing.rotation.z += smallThing.myRotation.z
@@ -119,25 +142,7 @@ export default class Debris extends Group {
       smallThing.scale.y += 0.005 * Math.sin(props.time)
       smallThing.scale.z += 0.005 * Math.sin(props.time)
 
-      smallThing.position.y = (smallThing.origY) * (spread / 200 + 1)
-
-      // const spot = i * 2 * Math.PI / this.small.length
-      //
-      // smallThing.position.x = 20 * Math.sin(props.time * 0.01 + spot)
-      // smallThing.position.z = 20 * Math.cos(props.time * 0.01 + spot)
-
-      // const theta = (0.0001 * time) + (i / (this.children.length - 1)) * 2 * Math.PI * fuckFactor
-      // const chi = (0.0001 * time) + (i / (this.children.length - 1)) * Math.PI * fuckFactor
-      //
-      // smallThing.position.x = spread * Math.cos(theta) * Math.sin(chi)
-      // smallThing.position.y = spread * Math.sin(theta) * Math.sin(chi)
-      // smallThing.position.z = spread * Math.cos(chi)
-      //
-      // smallThing.material.opacity = opacity
-      // smallThing.material.transparent = true
-
-
-
+      smallThing.position.y = (smallThing.origY + (Math.sign(smallThing.origY) * 10)) * spread / 200
     })
   }
 }
