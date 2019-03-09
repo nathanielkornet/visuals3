@@ -73,7 +73,7 @@ export default class Debris extends Group {
       this.small.push(mesh)
       this.smallGroup.add(mesh)
 
-      this.smallGroup.rotation.z -= 0.01
+      // this.smallGroup.rotation.z -= 0.01
 
       mesh.origY = Number(mesh.position.y)
     }
@@ -91,11 +91,13 @@ export default class Debris extends Group {
       d
     } = props
 
+    console.log(props)
+
     if (props.specialEffect && !this.crystal) {
       this.crystal = true
     }
 
-    this.rotation.y += 0.0001
+    this.rotation.y += 0.0002
 
     const globalGrowSpeed = c - 1
     const rotApply = d * 10
@@ -125,7 +127,8 @@ export default class Debris extends Group {
       }
     })
 
-    this.smallGroup.rotation.z += 0.0005
+    this.smallGroup.rotation.y += 0.0003
+    this.smallGroup.rotation.z += 0.0003
 
     this.small.forEach((smallThing, idx) => {
       smallThing.material.opacity = opacity
@@ -140,7 +143,6 @@ export default class Debris extends Group {
       smallThing.scale.z += 0.005 * Math.sin(props.time)
 
       smallThing.position.y = (smallThing.origY + (Math.sign(smallThing.origY) * 10)) * spread / 200
-
     })
   }
 }
