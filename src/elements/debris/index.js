@@ -79,6 +79,11 @@ export default class Debris extends Group {
     }
     this.add(this.smallGroup)
 
+    /* NEW STUFF */
+    // const fs = require('fs')
+    // const path = require('path')
+    // const exporter = new THREE.OBJExporter()
+    // fs.writeFileSync(path.join(__dirname, './test.obj'), exporter.parse(this))
   }
 
   update (props) {
@@ -90,8 +95,6 @@ export default class Debris extends Group {
       c,
       d
     } = props
-
-    console.log(props)
 
     if (props.specialEffect && !this.crystal) {
       this.crystal = true

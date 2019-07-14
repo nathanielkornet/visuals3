@@ -5,6 +5,9 @@ import Kaleido from './kaleido'
 import Mirror from './mirror'
 import Refractor from './refractor'
 import RGBShift from './rgb-shift'
+import BadTV from './bad-tv'
+import Sn8 from './sn8'
+import Sn82 from './sn8-2'
 
 const initialState = {
   val: 1,
@@ -45,11 +48,14 @@ export default class Effects {
     this.mirror = new Mirror(1)
     this.mirror2 = new Mirror(2)
     this.refractor = new Refractor(scene, midi)
+    this.badTV = new BadTV()
+    this.sn8 = new Sn8(renderer)
+    this.sn82 = new Sn82(renderer)
 
     this.effects = [
-      this.mirror,
+      this.badTV, // this.mirror,
       this.mirror2,
-      this.kaleido,
+      this.sn82, // this.kaleido,
       this.afterImage,
       this.dotify,
       this.edgey,

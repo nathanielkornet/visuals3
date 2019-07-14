@@ -33,7 +33,8 @@ import {
   Noodle,
   Debris,
   Particles,
-  Periphery
+  Periphery,
+  Waves
 } from './elements'
 import bind from '@dlmanning/bind'
 const SocketIOClient = require('socket.io-client')
@@ -130,7 +131,7 @@ export default class Visuals {
 
       // set mixer channel input sources, add source to scene
       // A controls
-      this.mixer.channels[0].setSource(new HeardYouLikeCubes())
+      this.mixer.channels[0].setSource(new Waves())
       this.mixer.channels[1].setSource(new Spherez())
       this.mixer.channels[2].setSource(new RandoPolys())
       this.mixer.channels[3].setSource(new Noodle())
