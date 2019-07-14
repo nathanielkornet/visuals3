@@ -33,7 +33,9 @@ export default class GiantContainer extends Group {
 
     const Material = color != null
       ? new MeshBasicMaterial({
-        color: color, wireframe
+        color: color,
+        wireframe,
+        side: DoubleSide
       })
       : new MeshNormalMaterial({
         wireframe,

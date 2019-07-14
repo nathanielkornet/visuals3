@@ -1,14 +1,25 @@
-import {
+// this makes it easier to use third party stuff
+// TODO: make this the preferred way of accessing THREE lib
+global.THREE = require('three')
+
+// loads external stuff. mostly from threejs demos.
+require('./ext')
+
+console.log('THREE', THREE)
+
+const {
   WebGLRenderer,
   Scene,
   PerspectiveCamera,
   Color
-} from 'three'
+} = THREE
 import VRControls from './lib/vr/vr-controls'
 import VREffect from './lib/vr/vr-effect'
 import Camera from './camera'
 import Mixer from './mixer'
+import Effects from './effects'
 import {
+  Atom,
   TriangleLand,
   Spherez,
   LineGeometry,
@@ -18,7 +29,11 @@ import {
   Sandbox,
   HeardYouLikeCubes,
   Flow,
-  Grid
+  Grid,
+  Noodle,
+  Debris,
+  Particles,
+  Periphery
 } from './elements'
 import bind from '@dlmanning/bind'
 const SocketIOClient = require('socket.io-client')
@@ -61,6 +76,7 @@ export default class Visuals {
     const renderer = new WebGLRenderer()
     renderer.setSize(window.innerWidth, window.innerHeight)
     // renderer.setPixelRatio(Math.floor(window.devicePixelRatio))
+    renderer.setClearColor( 0x20252f );
     document.body.appendChild(renderer.domElement)
 
     let camera = null
@@ -80,6 +96,13 @@ export default class Visuals {
     const scene = new Scene()
     scene.background = new Color('#000')
 
+    // light n fog
+    scene.fog = new THREE.Fog( 0x000000, 1, 1000 );
+    scene.add( new THREE.AmbientLight( 0x222222, 0.4 ) );
+		const	light = new THREE.DirectionalLight( 0xffffff );
+		light.position.set( 1, 1, 1 );
+		scene.add( light );
+
     if (process.env.SANDBOX) {
       // enter sandbox mode
       this.mixer = new Mixer(1, this.midi, this.socket, scene)
@@ -87,37 +110,65 @@ export default class Visuals {
       sandbox.setSource(new Sandbox())
       sandbox.setOpacity(0.85)
     } else {
-      this.mixer = new Mixer(8, this.midi, this.socket, scene)
+      this.mixer = new Mixer(16, this.midi, this.socket, scene)
+
+      /*
+      TriangleLand,
+      Spherez,
+      LineGeometry,
+      RandoPolys,
+      GiantSphere,
+      CircleGlobe,
+      HeardYouLikeCubes,
+      Flow,
+      Grid,
+      Noodle,
+      Debris,
+      Particles,
+      Periphery
+      */
 
       // set mixer channel input sources, add source to scene
-      this.mixer.channels[0].setSource(new TriangleLand())
+      // A controls
+      this.mixer.channels[0].setSource(new HeardYouLikeCubes())
       this.mixer.channels[1].setSource(new Spherez())
       this.mixer.channels[2].setSource(new RandoPolys())
-      this.mixer.channels[3].setSource(new GiantSphere({
-        wireframe: true
-      }))
-      this.mixer.channels[4].setSource(new GiantSphere({
-        wireframe: true,
-        shape: 'box',
-        color: 'green',
-        radius: 100
-      }))
-      this.mixer.channels[5].setSource(new LineGeometry())
-      this.mixer.channels[6].setSource(new CircleGlobe({
+      this.mixer.channels[3].setSource(new Noodle())
+      this.mixer.channels[4].setSource(new Debris()) // crystalz
+      this.mixer.channels[5].setSource(new TriangleLand())
+      this.mixer.channels[6].setSource(new Periphery())
+      this.mixer.channels[7].setSource(new Flow())
+      this.mixer.channels[8].setSource(new CircleGlobe({
         numCircles: 20,
         circleRadius: 5,
         circleSegments: 64
       }))
-      this.mixer.channels[7].setSource(new Grid())
-
-      // this.midi.logBindings()
+      // B controls
+      this.mixer.channels[9].setSource(new LineGeometry())
+      this.mixer.channels[10].setSource(new GiantSphere({
+        wireframe: true
+      }))
+      this.mixer.channels[11].setSource(new Grid())
+      this.mixer.channels[12].setSource(new Particles())
+      this.mixer.channels[13].setSource(new Atom())
+      this.mixer.channels[14].setSource(new Flow({
+        color: true
+      }))
+      this.mixer.channels[15].setSource(new GiantSphere({
+        color: 'white',
+        radius: 200
+      }))
     }
 
+    // init effects
+    const effects = new Effects(renderer, scene, camera, midi)
+
+    // store to (this) context for later access
     this.renderer = renderer
     this.camera = camera
     this.scene = scene
+    this.effects = effects
 
-    // let vrDisplay = null
     if (process.env.VR_CLIENT) {
       // Initialize VR environment
       if (navigator.getVRDisplays) {
@@ -134,10 +185,12 @@ export default class Visuals {
     } else {
       this.render()
     }
+
+    // this.midi.logBindings()
   }
 
   render (vrDisplay) {
-    const { renderer, camera, scene, mixer, controls, effect } = this
+    const { renderer, camera, scene, mixer, controls, effect, effects } = this
 
     if (process.env.VR_CLIENT && vrDisplay != null) {
       if (!vrDisplay.isPresenting && vrDisplay.requestPresent) {
@@ -157,7 +210,10 @@ export default class Visuals {
     } else {
       // update camera
       camera.update({time})
-      renderer.render(scene, camera)
+      // renderer.render(scene, camera)
     }
+
+    // effect rendering needs to happen after scene is rendered.
+    effects.render(time)
   }
 }

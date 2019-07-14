@@ -29,9 +29,9 @@ export default class HeardYouLikeCubes extends Group {
 
     this.boxes = []
 
-    this.addBoxes(3000, wireframe, Geometry, radius)
+    this.addBoxes(1700, wireframe, Geometry, radius)
     this.addBoxes(300, wireframe, Geometry, radius / 2)
-    this.addBoxes(5000, wireframe, Geometry, radius * 3)
+    this.addBoxes(1900, wireframe, Geometry, radius * 3)
 
     // 700 300 900
   }
@@ -67,9 +67,9 @@ export default class HeardYouLikeCubes extends Group {
         box.position.y = box.originalPosition.y * Math.sin(idx + time / 1000)
         box.position.z = box.originalPosition.z * Math.sin(idx + time / 1000)
       } else {
-        box.position.x = box.originalPosition.x * (spread / 100)
-        box.position.y = box.originalPosition.y * (spread / 100)
-        box.position.z = box.originalPosition.z * (spread / 100)
+        box.position.x = box.originalPosition.x * (spreadx)
+        box.position.y = box.originalPosition.y * (spready)
+        box.position.z = box.originalPosition.z * (spreadz)
       }
     })
   }
