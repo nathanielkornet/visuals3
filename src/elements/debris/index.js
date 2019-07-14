@@ -78,12 +78,6 @@ export default class Debris extends Group {
       mesh.origY = Number(mesh.position.y)
     }
     this.add(this.smallGroup)
-
-    /* NEW STUFF */
-    // const fs = require('fs')
-    // const path = require('path')
-    // const exporter = new THREE.OBJExporter()
-    // fs.writeFileSync(path.join(__dirname, './test.obj'), exporter.parse(this))
   }
 
   update (props) {

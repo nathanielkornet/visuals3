@@ -53,9 +53,9 @@ export default class Effects {
     this.sn82 = new Sn82(renderer)
 
     this.effects = [
-      this.badTV, // this.mirror,
+      this.mirror,
       this.mirror2,
-      this.sn82, // this.kaleido,
+      this.kaleido,
       this.afterImage,
       this.dotify,
       this.edgey,
