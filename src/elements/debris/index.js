@@ -78,7 +78,6 @@ export default class Debris extends Group {
       mesh.origY = Number(mesh.position.y)
     }
     this.add(this.smallGroup)
-
   }
 
   update (props) {
@@ -90,8 +89,6 @@ export default class Debris extends Group {
       c,
       d
     } = props
-
-    console.log(props)
 
     if (props.specialEffect && !this.crystal) {
       this.crystal = true

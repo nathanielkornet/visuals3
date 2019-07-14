@@ -44,6 +44,10 @@ export default class LineGeometry extends Group {
       { color: 'black', opacity: 0.5 }
     ))
     this.add(line)
+
+    // /* NEW STUFF */
+    // const exporter = new THREE.OBJExporter()
+    // console.log(exporter.parse(line))
   }
 
   update (props) {

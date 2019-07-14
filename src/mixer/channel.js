@@ -51,8 +51,6 @@ export default class Channel {
     let cNum = channelNum < 9 ? channelNum : channelNum - 8
     let midiChannel = channelNum < 9 ? 1 : 3
 
-    console.log(midiChannel, cNum)
-
     const faderId = `${midiChannel}-F${cNum}`
     const switchId = `${midiChannel}-S${cNum}`
 

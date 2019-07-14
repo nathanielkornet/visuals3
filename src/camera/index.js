@@ -37,7 +37,7 @@ export default class Camera extends PerspectiveCamera {
       })
     }
 
-    this.position.set(0, 0, 100)
+    this.position.set(0, 0, 400) // 100
     this.lookAt(origin)
 
     // TODO: maybe delete this

@@ -27,3 +27,5 @@ export { default as Sandbox } from './sandbox'
 export { default as Spherez } from './spherez'
 
 export { default as TriangleLand } from './triangle-land'
+
+export { default as Waves } from './waves'
